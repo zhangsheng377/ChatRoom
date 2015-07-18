@@ -1,4 +1,3 @@
-
 // stdafx.h : 标准系统包含文件的包含文件，
 // 或是经常使用但不常更改的
 // 特定于项目的包含文件
@@ -37,6 +36,7 @@
 #include <afxsock.h>            // MFC 套接字扩展
 
 
+#import "C:\Program Files\Common Files\System\ado\msado15.dll" no_namespace rename("EOF","adoEOF") rename("BOF","adoBOF")	//不能把这句话放到第一行
 
 
 
