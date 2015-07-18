@@ -1,4 +1,3 @@
-
 // 网络聊天室客户端Dlg.cpp : 实现文件
 //
 
@@ -45,6 +44,23 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
+	HRESULT hr;
+	try
+	{
+		//创建Connection对象
+		hr = m_ClientDB.CreateInstance("ADODB.Connection");
+		if (SUCCEEDED(hr))
+		{
+			hr = m_ClientDB->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=res/ClientDB.mdb", "", "", adModeUnknown);
+			//连接数据库
+		}
+	}
+	catch (_com_error e)
+	{
+		CString errormessage;
+		errormessage.Format(L"连接数据库失败!\r\n错误信息:%s", e.ErrorMessage());
+		AfxMessageBox(errormessage);
+	}
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
