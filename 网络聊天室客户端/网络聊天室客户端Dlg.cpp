@@ -61,6 +61,8 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 		errormessage.Format(L"连接数据库失败!\r\n错误信息:%s", e.ErrorMessage());
 		AfxMessageBox(errormessage);
 	}
+	_variant_t RecordsAffected;
+	m_ClientDB->Execute("CREATE TABLE 好友表(账号 INT,姓名 TEXT,在线 INT)", &RecordsAffected, adCmdText);	//创建表
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
