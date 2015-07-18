@@ -28,4 +28,8 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+
+
+public:
+	_ConnectionPtr m_ClientDB;				//连接ADO数据库,不用管此时的vs找不到_ConnectionPtr
 };
