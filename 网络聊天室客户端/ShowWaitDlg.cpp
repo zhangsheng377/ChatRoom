@@ -14,8 +14,7 @@ IMPLEMENT_DYNAMIC(ShowWaitDlg, CDialogEx)
 ShowWaitDlg::ShowWaitDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(ShowWaitDlg::IDD, pParent)
 {
-	//ASSERT(pParent);
-	//m_pParent = pParent;
+	
 }
 
 ShowWaitDlg::~ShowWaitDlg()

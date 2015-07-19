@@ -9,7 +9,7 @@ class ShowWaitDlg : public CDialogEx
 
 public:
 	ShowWaitDlg(CWnd* pParent = NULL);   // 标准构造函数
-	//CWnd *m_pParent;
+	
 	virtual ~ShowWaitDlg();
 
 // 对话框数据

@@ -45,13 +45,14 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
+	ShowWaitDlg *m_ShowWaitDlg;
 	m_ShowWaitDlg = new ShowWaitDlg(this);
 	if (m_ShowWaitDlg != NULL)
 	{
 		m_ShowWaitDlg->Create(IDD_DIALOG1, this);
 	}
 	m_ShowWaitDlg->ShowWindow(SW_SHOW);
-	
+	Sleep(1000);
 
 	HRESULT hr;
 	try
@@ -70,7 +71,19 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 		errormessage.Format(L"连接数据库失败!\r\n错误信息:%s", e.ErrorMessage());
 		AfxMessageBox(errormessage);
 	}
+	try
+	{
+		_variant_t RecordsAffected;
+		m_ClientDB->Execute("CREATE TABLE 好友表(账号 INT,姓名 TEXT,在线 INT)", &RecordsAffected, adCmdText);	//创建表
+	}
+	catch (_com_error e)
+	{
+		//CString errormessage;
+		//errormessage.Format(L"数据库中已有表!\r\n错误信息:%s", e.ErrorMessage());
+		//AfxMessageBox(errormessage);
+	}
 
+	
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

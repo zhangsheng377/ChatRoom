@@ -34,5 +34,5 @@ protected:
 
 public:
 	_ConnectionPtr m_ClientDB;				//连接ADO数据库,把生成的.tlh复制到项目文件夹中
-	ShowWaitDlg *m_ShowWaitDlg;
+	
 };
