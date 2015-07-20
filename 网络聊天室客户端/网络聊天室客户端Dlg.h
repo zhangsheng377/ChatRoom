@@ -48,4 +48,6 @@ public:
 		CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg *m_Wind;
 	}thread,*lpthread;
 
+	void FreshFriendList();
+	CListBox m_FriendList;
 };

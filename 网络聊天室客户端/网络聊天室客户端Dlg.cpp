@@ -25,6 +25,7 @@ C网络聊天室客户端Dlg::C网络聊天室客户端Dlg(CWnd* pParent /*=NULL*/)
 void C网络聊天室客户端Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_FriendList);
 }
 
 BEGIN_MESSAGE_MAP(C网络聊天室客户端Dlg, CDialogEx)
@@ -177,7 +178,7 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 			}
 			else
 			{
-				m_Socket.Send("AmIConnected", sizeof("AmIConnected"));
+				m_Socket.Send("AmIConnected", sizeof("AmIConnected") - 1);	//不减1就会多发一个.点
 				m_Socket.my_TryCount = 0;
 				SetTimer(2, 1000, NULL);
 				m_Socket.AsyncSelect(FD_READ);
@@ -203,20 +204,19 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 				BOOL cmp = !memcmp(m_Socket.my_Buffer, "YouAreConnected", sizeof("YouAreConnected"));	//相等为0
 				if (cmp)
 				{
-					AfxMessageBox(L"服务器已连接!");
-					m_ShowWaitDlg->DestroyWindow();
+					//AfxMessageBox(L"服务器已连接!");
+					m_ShowWaitDlg->SetWindowTextW(L"正在更新好友信息!请勿操作!");
 					ShowWindow(SW_SHOW);
+					FreshFriendList();
 				}
 				else
 				{
 					AfxMessageBox(L"服务器应答错误!可能不是正确的服务器或是网络有干扰!");
 					m_Socket.Close();
 					PostQuitMessage(0);
+					return;
 				}
-					
-				
-			}
-				
+			}	
 		}
 		break;
 	default:
@@ -232,7 +232,6 @@ void C网络聊天室客户端Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	CDialogEx::OnShowWindow(bShow, nStatus);
 
 	// TODO:  在此处添加消息处理程序代码
-	//ShowWindow(SW_HIDE);
 }
 
 
@@ -254,11 +253,12 @@ void C网络聊天室客户端Dlg::OnNcPaint()
 UINT C网络聊天室客户端Dlg::WaitToConnectServer(LPVOID pParam)
 {
 	lpthread temp = (lpthread)pParam;
-	//while (temp->m_Socket->my_Connected && !temp->m_Socket->my_Received)
-	{
-	}
-	//temp->m_ShowWaitDlg->DestroyWindow();
-	//temp->m_Wind->ShowWindow(SW_SHOW);
 
 	return 0;
+}
+
+
+void C网络聊天室客户端Dlg::FreshFriendList()
+{
+	m_FriendList.InsertString(0, L"dfds");
 }
