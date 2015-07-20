@@ -15,5 +15,7 @@ public:
 	int my_TryCount;
 	int my_TryMax;
 	virtual void OnConnect(int nErrorCode);
+	BOOL my_Received;
+	virtual void OnReceive(int nErrorCode);
 };
 

@@ -48,9 +48,7 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
-	//ShowWindow(SW_HIDE);
-
-	ShowWaitDlg *m_ShowWaitDlg;
+	
 	m_ShowWaitDlg = new ShowWaitDlg(this);
 	if (m_ShowWaitDlg != NULL)
 	{
@@ -82,9 +80,7 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	}
 	catch (_com_error e)
 	{
-		//CString errormessage;
-		//errormessage.Format(L"数据库中已有表!\r\n错误信息:%s", e.ErrorMessage());
-		//AfxMessageBox(errormessage);
+		//数据库中已有表!
 	}
 
 	m_Socket.my_Port = 32137;
@@ -94,10 +90,20 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	m_Socket.my_Connected = FALSE;
 	m_Socket.my_TryCount = 0;
 	SetTimer(1, 1000, NULL);
-
-	//m_ShowWaitDlg->ShowWindow(SW_HIDE);
-	m_ShowWaitDlg->DestroyWindow();
-	//ShowWindow(SW_SHOW);
+	/*
+	thread m_thread;
+	m_thread.m_Socket = &m_Socket;
+	m_thread.m_ShowWaitDlg = m_ShowWaitDlg;
+	m_thread.m_Wind = this;
+	CWinThread* mythread = AfxBeginThread(
+		(AFX_THREADPROC)WaitToConnectServer,
+		&m_thread,
+		THREAD_PRIORITY_NORMAL,
+		0,
+		0,
+		NULL
+		);
+	*/
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -165,12 +171,52 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 			if (m_Socket.my_TryCount >= m_Socket.my_TryMax)
 			{
 				AfxMessageBox(L"服务器连接超时!");
+				m_Socket.Close();
+				PostQuitMessage(0);
+				return;
 			}
 			else
 			{
-				
+				m_Socket.Send("AmIConnected", sizeof("AmIConnected"));
+				m_Socket.my_TryCount = 0;
+				SetTimer(2, 1000, NULL);
+				m_Socket.AsyncSelect(FD_READ);
 			}
 			return;
+		}
+		break;
+	case 2:
+		m_Socket.my_TryCount++;
+		if (m_Socket.my_TryCount >= m_Socket.my_TryMax || m_Socket.my_Received)
+		{
+			KillTimer(2);
+			if (m_Socket.my_TryCount >= m_Socket.my_TryMax)
+			{
+				m_Socket.my_Connected = FALSE;
+				AfxMessageBox(L"服务器无应答!");
+				m_Socket.Close();
+				PostQuitMessage(0);
+				return;
+			}
+			else
+			{
+				BOOL cmp = !memcmp(m_Socket.my_Buffer, "YouAreConnected", sizeof("YouAreConnected"));	//相等为0
+				if (cmp)
+				{
+					AfxMessageBox(L"服务器已连接!");
+					m_ShowWaitDlg->DestroyWindow();
+					ShowWindow(SW_SHOW);
+				}
+				else
+				{
+					AfxMessageBox(L"服务器应答错误!可能不是正确的服务器或是网络有干扰!");
+					m_Socket.Close();
+					PostQuitMessage(0);
+				}
+					
+				
+			}
+				
 		}
 		break;
 	default:
@@ -202,4 +248,17 @@ void C网络聊天室客户端Dlg::OnNcPaint()
 	}
 	else
 		CDialogEx::OnNcPaint();
+}
+
+
+UINT C网络聊天室客户端Dlg::WaitToConnectServer(LPVOID pParam)
+{
+	lpthread temp = (lpthread)pParam;
+	//while (temp->m_Socket->my_Connected && !temp->m_Socket->my_Received)
+	{
+	}
+	//temp->m_ShowWaitDlg->DestroyWindow();
+	//temp->m_Wind->ShowWindow(SW_SHOW);
+
+	return 0;
 }

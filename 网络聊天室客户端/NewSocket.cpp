@@ -9,6 +9,7 @@ CNewSocket::CNewSocket()
 	my_Connected = FALSE;
 	my_TryCount = 0;
 	my_TryMax = 10;
+	my_Received = FALSE;
 }
 
 
@@ -29,3 +30,15 @@ void CNewSocket::OnConnect(int nErrorCode)
 
 	CAsyncSocket::OnConnect(nErrorCode);
 }
+
+
+void CNewSocket::OnReceive(int nErrorCode)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	my_Length = Receive(my_Buffer, sizeof(my_Buffer), 0);
+	if (my_Length > 0) my_Received = TRUE;
+
+	CAsyncSocket::OnReceive(nErrorCode);
+}
+
+

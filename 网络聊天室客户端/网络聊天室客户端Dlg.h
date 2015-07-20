@@ -39,4 +39,13 @@ public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnNcPaint();
+	static UINT WaitToConnectServer(LPVOID pParam);
+	ShowWaitDlg *m_ShowWaitDlg;
+
+	typedef struct ThreadInfo{
+		CNewSocket *m_Socket;
+		ShowWaitDlg *m_ShowWaitDlg;
+		CÕ¯¬Á¡ƒÃÏ “øÕªß∂ÀDlg *m_Wind;
+	}thread,*lpthread;
+
 };
