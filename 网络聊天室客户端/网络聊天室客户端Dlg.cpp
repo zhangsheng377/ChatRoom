@@ -97,7 +97,7 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 
 	//m_ShowWaitDlg->ShowWindow(SW_HIDE);
 	m_ShowWaitDlg->DestroyWindow();
-
+	//ShowWindow(SW_SHOW);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
