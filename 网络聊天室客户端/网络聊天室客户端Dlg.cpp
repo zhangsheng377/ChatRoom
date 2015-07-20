@@ -30,6 +30,9 @@ void C网络聊天室客户端Dlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(C网络聊天室客户端Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_WM_TIMER()
+	ON_WM_SHOWWINDOW()
+	ON_WM_NCPAINT()
 END_MESSAGE_MAP()
 
 
@@ -45,6 +48,8 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
+	//ShowWindow(SW_HIDE);
+
 	ShowWaitDlg *m_ShowWaitDlg;
 	m_ShowWaitDlg = new ShowWaitDlg(this);
 	if (m_ShowWaitDlg != NULL)
@@ -52,7 +57,6 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 		m_ShowWaitDlg->Create(IDD_DIALOG1, this);
 	}
 	m_ShowWaitDlg->ShowWindow(SW_SHOW);
-	Sleep(1000);
 
 	HRESULT hr;
 	try
@@ -83,7 +87,17 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 		//AfxMessageBox(errormessage);
 	}
 
-	
+	m_Socket.my_Port = 32137;
+	m_Socket.my_IP = "zhangsheng377.wicp.net";
+	m_Socket.ShutDown(2);
+	m_Socket.m_hSocket = INVALID_SOCKET;
+	m_Socket.my_Connected = FALSE;
+	m_Socket.my_TryCount = 0;
+	SetTimer(1, 1000, NULL);
+
+	//m_ShowWaitDlg->ShowWindow(SW_HIDE);
+	m_ShowWaitDlg->DestroyWindow();
+
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -124,3 +138,68 @@ HCURSOR C网络聊天室客户端Dlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	switch (nIDEvent)
+	{
+	case 1:
+		if (m_Socket.m_hSocket == INVALID_SOCKET)
+		{
+			BOOL bFlag = m_Socket.Create(0, SOCK_STREAM, FD_CONNECT);
+			if (!bFlag)
+			{
+				AfxMessageBox(L"服务器连接创建错误!");
+				m_Socket.Close();
+				PostQuitMessage(0);
+				return;
+			}
+		}
+		m_Socket.Connect(m_Socket.my_IP, m_Socket.my_Port);
+		m_Socket.my_TryCount++;
+		if (m_Socket.my_TryCount >= m_Socket.my_TryMax || m_Socket.my_Connected)
+		{
+			KillTimer(1);
+			if (m_Socket.my_TryCount >= m_Socket.my_TryMax)
+			{
+				AfxMessageBox(L"服务器连接超时!");
+			}
+			else
+			{
+				
+			}
+			return;
+		}
+		break;
+	default:
+		break;
+	}
+
+	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+void C网络聊天室客户端Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+
+	// TODO:  在此处添加消息处理程序代码
+	//ShowWindow(SW_HIDE);
+}
+
+
+void C网络聊天室客户端Dlg::OnNcPaint()
+{
+	// TODO:  在此处添加消息处理程序代码
+	// 不为绘图消息调用 CDialogEx::OnNcPaint()
+	static int i = 1;
+	if (i > 0)
+	{
+		i--;
+		ShowWindow(SW_HIDE);
+	}
+	else
+		CDialogEx::OnNcPaint();
+}

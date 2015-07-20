@@ -3,6 +3,7 @@
 //
 
 #include "ShowWaitDlg.h"
+#include "NewSocket.h"
 
 #pragma once
 
@@ -34,5 +35,8 @@ protected:
 
 public:
 	_ConnectionPtr m_ClientDB;				//连接ADO数据库,把生成的.tlh复制到项目文件夹中
-	
+	CNewSocket m_Socket;
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg void OnNcPaint();
 };
