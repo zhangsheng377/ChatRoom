@@ -6,7 +6,6 @@
 #include "NewSocket.h"
 #include <vector>
 #include "afxcmn.h"
-//const int NameLengthMax = 10;
 #pragma once
 
 
@@ -57,10 +56,10 @@ public:
 
 	class FRIEND {
 	public:
-		int account;
-		//char name[NameLengthMax];
+		CString account;
 		CString name;
 	};
 	std::vector<FRIEND> friends;
 	CListCtrl m_FriendList;
+	CImageList *m_pImageList;
 };

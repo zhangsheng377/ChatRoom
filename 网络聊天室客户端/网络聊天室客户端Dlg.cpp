@@ -1,9 +1,9 @@
-// ÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg.cpp : ÊµÏÖÎÄ¼ş
+ï»¿// ç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
-#include "ÍøÂçÁÄÌìÊÒ¿Í»§¶Ë.h"
-#include "ÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg.h"
+#include "ç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯.h"
+#include "ç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg.h"
 #include "afxdialogex.h"
 
 
@@ -12,24 +12,24 @@
 #endif
 
 
-// CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg ¶Ô»°¿ò
+// Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg å¯¹è¯æ¡†
 
 
 
-CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::IDD, pParent)
+Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg(CWnd* pParent /*=NULL*/)
+	: CDialogEx(Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::DoDataExchange(CDataExchange* pDX)
+void Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_FriendList);
 	DDX_Control(pDX, IDC_LIST1, m_FriendList);
 }
 
-BEGIN_MESSAGE_MAP(CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_TIMER()
@@ -38,33 +38,38 @@ BEGIN_MESSAGE_MAP(CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg ÏûÏ¢´¦Àí³ÌĞò
+// Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
-BOOL CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnInitDialog()
+BOOL Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£  µ±Ó¦ÓÃ³ÌĞòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
-	//  Ö´ĞĞ´Ë²Ù×÷
-	SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
-	SetIcon(m_hIcon, FALSE);		// ÉèÖÃĞ¡Í¼±ê
-
-	// TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
-	CRect rect;
-	// »ñÈ¡±à³ÌÓïÑÔÁĞ±íÊÓÍ¼¿Ø¼şµÄÎ»ÖÃºÍ´óĞ¡   
-	m_FriendList.GetClientRect(&rect);
-	// ÎªÁĞ±íÊÓÍ¼¿Ø¼şÌí¼ÓÈ«ĞĞÑ¡ÖĞºÍÕ¤¸ñ·ç¸ñ   
-	m_FriendList.SetExtendedStyle(m_FriendList.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	// ÎªÁĞ±íÊÓÍ¼¿Ø¼şÌí¼ÓÈıÁĞ   
-	m_FriendList.InsertColumn(0, _T("Online"), LVCFMT_CENTER, rect.Width() / 3, 0);
-	m_FriendList.InsertColumn(1, _T("ºÃÓÑĞÕÃû"), LVCFMT_CENTER, rect.Width() / 3 * 2, 1);
+	// è®¾ç½®æ­¤å¯¹è¯æ¡†çš„å›¾æ ‡ã€‚  å½“åº”ç”¨ç¨‹åºä¸»çª—å£ä¸æ˜¯å¯¹è¯æ¡†æ—¶ï¼Œæ¡†æ¶å°†è‡ªåŠ¨
+	//  æ‰§è¡Œæ­¤æ“ä½œ
+	SetIcon(m_hIcon, TRUE);			// è®¾ç½®å¤§å›¾æ ‡
+	SetIcon(m_hIcon, FALSE);		// è®¾ç½®å°å›¾æ ‡
 	
+	// TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–ä»£ç 
+	m_pImageList = new CImageList();
+	m_pImageList->Create(25, 25, ILC_COLOR32, 0, 2);	//å¿…ä¸å¯å°‘
+	HBITMAP hBitmap1, hBitmap2;
+	CBitmap *pBitmap1, *pBitmap2;
+	pBitmap1 = new CBitmap;pBitmap2 = new CBitmap;
+	//ä»æ–‡ä»¶å¯¼å…¥ä½å›¾Â Â 
+	hBitmap1 = (HBITMAP)LoadImage(AfxGetInstanceHandle(), L"res/online.bmp",IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	pBitmap1->Attach(hBitmap1);
+	m_pImageList->Add(pBitmap1, RGB(0, 0, 0));
+	hBitmap2 = (HBITMAP)LoadImage(AfxGetInstanceHandle(), L"res/offline.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	pBitmap2->Attach(hBitmap2);
+	m_pImageList->Add(pBitmap2, RGB(0, 0, 0));
+	m_FriendList.SetImageList(m_pImageList, LVSIL_SMALL);
+
 	m_ShowWaitDlg = new ShowWaitDlg(this);
 	if (m_ShowWaitDlg != NULL)
 	{
 		m_ShowWaitDlg->Create(IDD_DIALOG1, this);
 	}
-	m_ShowWaitDlg->ShowWindow(SW_SHOW);			//ÕıÔÚÁ¬½Ó·şÎñÆ÷
+	m_ShowWaitDlg->ShowWindow(SW_SHOW);			//æ­£åœ¨è¿æ¥æœåŠ¡å™¨
 
 	m_Socket.my_Port = 32137;
 	m_Socket.my_IP = "zhangsheng377.wicp.net";
@@ -88,47 +93,47 @@ BOOL CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnInitDialog()
 		);
 	*/
 
-	//Á¬½ÓÊı¾İ¿â
+	//è¿æ¥æ•°æ®åº“
 	HRESULT hr;
 	try
 	{
-		//´´½¨Connection¶ÔÏó
+		//åˆ›å»ºConnectionå¯¹è±¡
 		hr = m_pClientDB.CreateInstance("ADODB.Connection");
 		if (SUCCEEDED(hr))
 		{
 			hr = m_pClientDB->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=res/ClientDB.mdb", "", "", adModeUnknown);
-			//Á¬½ÓÊı¾İ¿â
+			//è¿æ¥æ•°æ®åº“
 		}
 	}
 	catch (_com_error e)
 	{
 		CString errormessage;
-		errormessage.Format(L"Á¬½ÓÊı¾İ¿âÊ§°Ü!\r\n´íÎóĞÅÏ¢:%s", e.ErrorMessage());
+		errormessage.Format(L"è¿æ¥æ•°æ®åº“å¤±è´¥!\r\né”™è¯¯ä¿¡æ¯:%s", e.ErrorMessage());
 		AfxMessageBox(errormessage);
 		m_Socket.Close();
 		PostQuitMessage(0);
 	}
 	_variant_t RecordsAffected;
-	m_pRecordSet = m_pClientDB->Execute("SELECT COUNT(*) FROM ºÃÓÑ±í", &RecordsAffected, adCmdText);
+	m_pRecordSet = m_pClientDB->Execute("SELECT COUNT(*) FROM å¥½å‹è¡¨", &RecordsAffected, adCmdText);
 	_variant_t vIndex = (long)0;
 	_variant_t vCount = m_pRecordSet->GetCollect(vIndex);
 	int count = vCount.lVal;
 	m_pRecordSet->Close();
 	if (count == 0)
 	{
-		AfxMessageBox(L"Êı¾İ±í±»ÆÆ»µ!");
+		AfxMessageBox(L"æ•°æ®è¡¨è¢«ç ´å!");
 		m_Socket.Close();
 		PostQuitMessage(0);
 	}
 	m_pRecordSet.CreateInstance(__uuidof(Recordset));
 	try
 	{
-		m_pRecordSet->Open("SELECT * FROM ºÃÓÑ±í", m_pClientDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+		m_pRecordSet->Open("SELECT * FROM å¥½å‹è¡¨", m_pClientDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
 	}
 	catch (_com_error e)
 	{
 		CString errormessage;
-		errormessage.Format(L"´ò¿ªÊı¾İ±íÊ§°Ü!\r\n´íÎóĞÅÏ¢:%s", e.ErrorMessage());
+		errormessage.Format(L"æ‰“å¼€æ•°æ®è¡¨å¤±è´¥!\r\né”™è¯¯ä¿¡æ¯:%s", e.ErrorMessage());
 		AfxMessageBox(errormessage);
 		m_Socket.Close();
 		PostQuitMessage(0);
@@ -137,22 +142,22 @@ BOOL CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnInitDialog()
 
 
 
-	return TRUE;  // ³ı·Ç½«½¹µãÉèÖÃµ½¿Ø¼ş£¬·ñÔò·µ»Ø TRUE
+	return TRUE;  // é™¤éå°†ç„¦ç‚¹è®¾ç½®åˆ°æ§ä»¶ï¼Œå¦åˆ™è¿”å› TRUE
 }
 
-// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îĞ¡»¯°´Å¥£¬ÔòĞèÒªÏÂÃæµÄ´úÂë
-//  À´»æÖÆ¸ÃÍ¼±ê¡£  ¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ĞÍµÄ MFC Ó¦ÓÃ³ÌĞò£¬
-//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
+// å¦‚æœå‘å¯¹è¯æ¡†æ·»åŠ æœ€å°åŒ–æŒ‰é’®ï¼Œåˆ™éœ€è¦ä¸‹é¢çš„ä»£ç 
+//  æ¥ç»˜åˆ¶è¯¥å›¾æ ‡ã€‚  å¯¹äºä½¿ç”¨æ–‡æ¡£/è§†å›¾æ¨¡å‹çš„ MFC åº”ç”¨ç¨‹åºï¼Œ
+//  è¿™å°†ç”±æ¡†æ¶è‡ªåŠ¨å®Œæˆã€‚
 
-void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnPaint()
+void Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
+		CPaintDC dc(this); // ç”¨äºç»˜åˆ¶çš„è®¾å¤‡ä¸Šä¸‹æ–‡
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØĞÎÖĞ¾ÓÖĞ
+		// ä½¿å›¾æ ‡åœ¨å·¥ä½œåŒºçŸ©å½¢ä¸­å±…ä¸­
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -160,7 +165,7 @@ void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// »æÖÆÍ¼±ê
+		// ç»˜åˆ¶å›¾æ ‡
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -169,18 +174,18 @@ void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnPaint()
 	}
 }
 
-//µ±ÓÃ»§ÍÏ¶¯×îĞ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊıÈ¡µÃ¹â±ê
-//ÏÔÊ¾¡£
-HCURSOR CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnQueryDragIcon()
+//å½“ç”¨æˆ·æ‹–åŠ¨æœ€å°åŒ–çª—å£æ—¶ç³»ç»Ÿè°ƒç”¨æ­¤å‡½æ•°å–å¾—å…‰æ ‡
+//æ˜¾ç¤ºã€‚
+HCURSOR Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
 
-void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnTimer(UINT_PTR nIDEvent)
+void Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::OnTimer(UINT_PTR nIDEvent)
 {
-	// TODO:  ÔÚ´ËÌí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂëºÍ/»òµ÷ÓÃÄ¬ÈÏÖµ
+	// TODO:  åœ¨æ­¤æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç å’Œ/æˆ–è°ƒç”¨é»˜è®¤å€¼
 	switch (nIDEvent)
 	{
 	case 1:
@@ -189,7 +194,7 @@ void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnTimer(UINT_PTR nIDEvent)
 			BOOL bFlag = m_Socket.Create(0, SOCK_STREAM, FD_CONNECT);
 			if (!bFlag)
 			{
-				AfxMessageBox(L"·şÎñÆ÷Á¬½Ó´´½¨´íÎó!");
+				AfxMessageBox(L"æœåŠ¡å™¨è¿æ¥åˆ›å»ºé”™è¯¯!");
 				m_Socket.Close();
 				PostQuitMessage(0);
 				return;
@@ -202,14 +207,14 @@ void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnTimer(UINT_PTR nIDEvent)
 			KillTimer(1);
 			if (m_Socket.my_TryCount >= m_Socket.my_TryMax)
 			{
-				AfxMessageBox(L"·şÎñÆ÷Á¬½Ó³¬Ê±!");
+				AfxMessageBox(L"æœåŠ¡å™¨è¿æ¥è¶…æ—¶!");
 				m_Socket.Close();
 				PostQuitMessage(0);
 				return;
 			}
 			else
 			{
-				m_Socket.Send("AmIConnected", sizeof("AmIConnected") - 1);	//²»¼õ1¾Í»á¶à·¢Ò»¸ö.µã
+				m_Socket.Send("AmIConnected", sizeof("AmIConnected") - 1);	//ä¸å‡1å°±ä¼šå¤šå‘ä¸€ä¸ª.ç‚¹
 				m_Socket.my_TryCount = 0;
 				SetTimer(2, 1000, NULL);
 				m_Socket.AsyncSelect(FD_READ);
@@ -225,24 +230,25 @@ void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnTimer(UINT_PTR nIDEvent)
 			if (m_Socket.my_TryCount >= m_Socket.my_TryMax)
 			{
 				m_Socket.my_Connected = FALSE;
-				AfxMessageBox(L"·şÎñÆ÷ÎŞÓ¦´ğ!");
+				AfxMessageBox(L"æœåŠ¡å™¨æ— åº”ç­”!");
 				m_Socket.Close();
 				PostQuitMessage(0);
 				return;
 			}
 			else
 			{
-				BOOL cmp = !memcmp(m_Socket.my_Buffer, "YouAreConnected", sizeof("YouAreConnected"));	//ÏàµÈÎª0
+				BOOL cmp = !memcmp(m_Socket.my_Buffer, "YouAreConnected", sizeof("YouAreConnected"));	//ç›¸ç­‰ä¸º0
 				if (cmp)
 				{
-					//AfxMessageBox(L"·şÎñÆ÷ÒÑÁ¬½Ó!");
-					m_ShowWaitDlg->SetWindowTextW(L"ÕıÔÚ¸üĞÂºÃÓÑĞÅÏ¢!ÇëÎğ²Ù×÷!");
+					//AfxMessageBox(L"æœåŠ¡å™¨å·²è¿æ¥!");
+					m_ShowWaitDlg->SetWindowTextW(L"æ­£åœ¨æ›´æ–°å¥½å‹ä¿¡æ¯!è¯·å‹¿æ“ä½œ!");
 					ShowWindow(SW_SHOW);
+					m_ShowWaitDlg->DestroyWindow();
 					FreshFriendList();
 				}
 				else
 				{
-					AfxMessageBox(L"·şÎñÆ÷Ó¦´ğ´íÎó!¿ÉÄÜ²»ÊÇÕıÈ·µÄ·şÎñÆ÷»òÊÇÍøÂçÓĞ¸ÉÈÅ!");
+					AfxMessageBox(L"æœåŠ¡å™¨åº”ç­”é”™è¯¯!å¯èƒ½ä¸æ˜¯æ­£ç¡®çš„æœåŠ¡å™¨æˆ–æ˜¯ç½‘ç»œæœ‰å¹²æ‰°!");
 					m_Socket.Close();
 					PostQuitMessage(0);
 					return;
@@ -258,18 +264,18 @@ void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnTimer(UINT_PTR nIDEvent)
 }
 
 
-void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 
-	// TODO:  ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂë
+	// TODO:  åœ¨æ­¤å¤„æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç 
 }
 
 
-void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnNcPaint()
+void Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::OnNcPaint()
 {
-	// TODO:  ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂë
-	// ²»Îª»æÍ¼ÏûÏ¢µ÷ÓÃ CDialogEx::OnNcPaint()
+	// TODO:  åœ¨æ­¤å¤„æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç 
+	// ä¸ä¸ºç»˜å›¾æ¶ˆæ¯è°ƒç”¨ CDialogEx::OnNcPaint()
 	static int i = 1;
 	if (i > 0)
 	{
@@ -281,7 +287,7 @@ void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::OnNcPaint()
 }
 
 
-UINT CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::WaitToConnectServer(LPVOID pParam)
+UINT Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::WaitToConnectServer(LPVOID pParam)
 {
 	lpthread temp = (lpthread)pParam;
 
@@ -289,18 +295,49 @@ UINT CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::WaitToConnectServer(LPVOID pParam)
 }
 
 
-void CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg::FreshFriendList()
+void Cç½‘ç»œèŠå¤©å®¤å®¢æˆ·ç«¯Dlg::FreshFriendList()
 {
+	ShowWaitDlg *m_ShowWaitDlg;
+	m_ShowWaitDlg = new ShowWaitDlg(this);
+	if (m_ShowWaitDlg != NULL)
+	{
+		m_ShowWaitDlg->Create(IDD_DIALOG1, this);
+		m_ShowWaitDlg->SetWindowTextW(L"æ­£åœ¨æ›´æ–°å¥½å‹ä¿¡æ¯!è¯·å‹¿æ“ä½œ!");
+		m_ShowWaitDlg->ShowWindow(SW_SHOW);
+	}
+	
 	m_FriendList.DeleteAllItems();
 	m_pRecordSet->MoveFirst();
 	FRIEND temp;
 	while(!m_pRecordSet->adoEOF)
 	{
-		temp.account = (int)m_pRecordSet->GetCollect("ÕËºÅ");
-		temp.name = (CString)m_pRecordSet->GetCollect("ĞÕÃû");
+		temp.account = (CString)m_pRecordSet->GetCollect("è´¦å·");
+		temp.name = (CString)m_pRecordSet->GetCollect("å§“å");
+
+		m_Socket.my_Length = 0;
+		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+		m_Socket.my_SendData = L"SearchFriendOnline";
+		m_Socket.my_SendData += temp.account;
+		m_Socket.my_Length = WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength(), NULL, 0, NULL, NULL);
+		WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength() + 1, m_Socket.my_Buffer, m_Socket.my_Length + 1, NULL, NULL);	//è½¬æ¢ä¸ºå­—èŠ‚ä¸ºå•ä½
+		m_Socket.my_Buffer[m_Socket.my_Length + 1] = '/0';
+		m_Socket.Send(m_Socket.my_Buffer, m_Socket.my_Length, 0);
+		m_Socket.my_Length = 0;
+		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+
+		m_Socket.my_Length = m_Socket.Receive(m_Socket.my_Buffer, sizeof(m_Socket.my_Buffer));
+		CString IsOnline;
+		IsOnline.Format(L"%s", CString(m_Socket.my_Buffer));		//ä¸€å®šè¦æŠŠchar[]ç”¨CStringå¼ºåˆ¶è½¬æ¢,å¦åˆ™CString tempé‡Œä¼šæœ‰ä¹±ç 
+		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+
+		temp.name = IsOnline;
 		friends.push_back(temp);
 		m_pRecordSet->MoveNext();
 	} 
+	for (UINT i = 0;i < friends.size();i++)
+	{
+		m_FriendList.InsertItem(i, friends[i].name, 1);
+	}
 
 	m_ShowWaitDlg->DestroyWindow();
 }

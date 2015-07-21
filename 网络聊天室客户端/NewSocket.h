@@ -17,5 +17,6 @@ public:
 	virtual void OnConnect(int nErrorCode);
 	BOOL my_Received;
 	virtual void OnReceive(int nErrorCode);
+	CString my_SendData;
 };
 
