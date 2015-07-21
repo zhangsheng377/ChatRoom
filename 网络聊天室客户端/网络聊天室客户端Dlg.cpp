@@ -55,34 +55,7 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	{
 		m_ShowWaitDlg->Create(IDD_DIALOG1, this);
 	}
-	m_ShowWaitDlg->ShowWindow(SW_SHOW);
-
-	HRESULT hr;
-	try
-	{
-		//创建Connection对象
-		hr = m_ClientDB.CreateInstance("ADODB.Connection");
-		if (SUCCEEDED(hr))
-		{
-			hr = m_ClientDB->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=res/ClientDB.mdb", "", "", adModeUnknown);
-			//连接数据库
-		}
-	}
-	catch (_com_error e)
-	{
-		CString errormessage;
-		errormessage.Format(L"连接数据库失败!\r\n错误信息:%s", e.ErrorMessage());
-		AfxMessageBox(errormessage);
-	}
-	try
-	{
-		_variant_t RecordsAffected;
-		m_ClientDB->Execute("CREATE TABLE 好友表(账号 INT,姓名 TEXT,在线 INT)", &RecordsAffected, adCmdText);	//创建表
-	}
-	catch (_com_error e)
-	{
-		//数据库中已有表!
-	}
+	m_ShowWaitDlg->ShowWindow(SW_SHOW);			//正在连接服务器
 
 	m_Socket.my_Port = 32137;
 	m_Socket.my_IP = "zhangsheng377.wicp.net";
@@ -105,6 +78,55 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 		NULL
 		);
 	*/
+
+	//连接数据库
+	HRESULT hr;
+	try
+	{
+		//创建Connection对象
+		hr = m_pClientDB.CreateInstance("ADODB.Connection");
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pClientDB->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=res/ClientDB.mdb", "", "", adModeUnknown);
+			//连接数据库
+		}
+	}
+	catch (_com_error e)
+	{
+		CString errormessage;
+		errormessage.Format(L"连接数据库失败!\r\n错误信息:%s", e.ErrorMessage());
+		AfxMessageBox(errormessage);
+		m_Socket.Close();
+		PostQuitMessage(0);
+	}
+	_variant_t RecordsAffected;
+	m_pRecordSet = m_pClientDB->Execute("SELECT COUNT(*) FROM 好友表", &RecordsAffected, adCmdText);
+	_variant_t vIndex = (long)0;
+	_variant_t vCount = m_pRecordSet->GetCollect(vIndex);
+	int count = vCount.lVal;
+	m_pRecordSet->Close();
+	if (count == 0)
+	{
+		AfxMessageBox(L"数据表被破坏!");
+		m_Socket.Close();
+		PostQuitMessage(0);
+	}
+	m_pRecordSet.CreateInstance(__uuidof(Recordset));
+	try
+	{
+		m_pRecordSet->Open("SELECT * FROM 好友表", m_pClientDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+	}
+	catch (_com_error e)
+	{
+		CString errormessage;
+		errormessage.Format(L"打开数据表失败!\r\n错误信息:%s", e.ErrorMessage());
+		AfxMessageBox(errormessage);
+		m_Socket.Close();
+		PostQuitMessage(0);
+	}
+	
+
+
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -260,5 +282,16 @@ UINT C网络聊天室客户端Dlg::WaitToConnectServer(LPVOID pParam)
 
 void C网络聊天室客户端Dlg::FreshFriendList()
 {
-	m_FriendList.InsertString(0, L"dfds");
+	m_FriendList.ResetContent();
+	m_pRecordSet->MoveFirst();
+	FRIEND temp;
+	while(!m_pRecordSet->adoEOF)
+	{
+		temp.account = (int)m_pRecordSet->GetCollect("账号");
+		temp.name = (CString)m_pRecordSet->GetCollect("姓名");
+		friends.push_back(temp);
+		m_FriendList.InsertString(0, temp.name);
+		m_pRecordSet->MoveNext();
+	} 
+	m_ShowWaitDlg->DestroyWindow();
 }

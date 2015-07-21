@@ -4,7 +4,8 @@
 
 #include "ShowWaitDlg.h"
 #include "NewSocket.h"
-
+#include <vector>
+//const int NameLengthMax = 10;
 #pragma once
 
 
@@ -34,7 +35,7 @@ protected:
 
 
 public:
-	_ConnectionPtr m_ClientDB;				//连接ADO数据库,把生成的.tlh复制到项目文件夹中
+	
 	CNewSocket m_Socket;
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
@@ -48,6 +49,16 @@ public:
 		C网络聊天室客户端Dlg *m_Wind;
 	}thread,*lpthread;
 
+	_ConnectionPtr m_pClientDB;				//连接ADO数据库,把生成的.tlh复制到项目文件夹中
+	_RecordsetPtr m_pRecordSet;
 	void FreshFriendList();
 	CListBox m_FriendList;
+
+	class FRIEND {
+	public:
+		int account;
+		//char name[NameLengthMax];
+		CString name;
+	};
+	std::vector<FRIEND> friends;
 };
