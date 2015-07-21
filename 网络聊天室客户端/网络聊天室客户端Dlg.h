@@ -58,6 +58,7 @@ public:
 	public:
 		CString account;
 		CString name;
+		int isonline;
 	};
 	std::vector<FRIEND> friends;
 	CListCtrl m_FriendList;

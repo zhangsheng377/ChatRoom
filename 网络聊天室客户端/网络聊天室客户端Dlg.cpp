@@ -325,18 +325,22 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 		m_Socket.my_Length = 0;
 		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
 
-		m_Socket.my_Length = m_Socket.Receive(m_Socket.my_Buffer, sizeof(m_Socket.my_Buffer));
+		do
+		{
+			m_Socket.my_Length = m_Socket.Receive(m_Socket.my_Buffer, sizeof(m_Socket.my_Buffer));
+		} while (m_Socket.my_Buffer[0]=='\0');
 		CString IsOnline;
 		IsOnline.Format(L"%s", CString(m_Socket.my_Buffer));		//一定要把char[]用CString强制转换,否则CString temp里会有乱码
+		if (IsOnline == L"Online") temp.isonline = 0;
+		else temp.isonline = 1;
 		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
 
-		temp.name = IsOnline;
 		friends.push_back(temp);
 		m_pRecordSet->MoveNext();
 	} 
 	for (UINT i = 0;i < friends.size();i++)
 	{
-		m_FriendList.InsertItem(i, friends[i].name, 1);
+		m_FriendList.InsertItem(i, friends[i].name, friends[i].isonline);
 	}
 
 	m_ShowWaitDlg->DestroyWindow();
