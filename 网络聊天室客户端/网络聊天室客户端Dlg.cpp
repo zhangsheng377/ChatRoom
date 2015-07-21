@@ -240,11 +240,77 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 				BOOL cmp = !memcmp(m_Socket.my_Buffer, "YouAreConnected", sizeof("YouAreConnected"));	//相等为0
 				if (cmp)
 				{
-					//AfxMessageBox(L"服务器已连接!");
-					m_ShowWaitDlg->SetWindowTextW(L"正在更新好友信息!请勿操作!");
-					ShowWindow(SW_SHOW);
+					AfxMessageBox(L"服务器已连接!");
 					m_ShowWaitDlg->DestroyWindow();
-					FreshFriendList();
+					LoginClass m_Login;
+					CString answer;
+					int result = m_Login.DoModal();
+					if (result == IDOK)
+					{
+						UpdateData(TRUE);
+						m_Socket.my_SendData = L"LoginMyName";
+						m_Socket.my_SendData += m_Login.my_Name;
+						answer = SendReceiveCommand();
+						if (answer == L"HereYouAre")
+						{
+							m_Socket.my_SendData = L"LoginMyPassword";
+							m_Socket.my_SendData += m_Login.my_Password;
+							answer = SendReceiveCommand();
+							if (answer == L"YourPasswordIsRight")
+							{
+								ShowWindow(SW_SHOW);
+								FreshFriendList();
+							}
+							else
+							{
+								AfxMessageBox(L"您的密码有误!");
+								m_Socket.Close();
+								PostQuitMessage(0);
+								return;
+							}
+						}
+						else
+						{
+							AfxMessageBox(L"您没有注册!");
+							m_Socket.Close();
+							PostQuitMessage(0);
+							return;
+						}
+					}
+					else
+					{
+						UpdateData(TRUE);
+						m_Socket.my_SendData = L"EnrollMyName";
+						m_Socket.my_SendData += m_Login.my_Name;
+						answer = SendReceiveCommand();
+						if (answer != L"HereYouAre")
+						{
+							m_Socket.my_SendData = L"EnrollMyPassword";
+							m_Socket.my_SendData += m_Login.my_Password;
+							answer = SendReceiveCommand();
+							if (answer == L"NowYouAreEnrolled")
+							{
+								ShowWindow(SW_SHOW);
+								FreshFriendList();
+							}
+							else
+							{
+								AfxMessageBox(L"注册过程出现异常!请重试!");
+								m_Socket.Close();
+								PostQuitMessage(0);
+								return;
+							}
+						}
+						else
+						{
+							AfxMessageBox(L"您已经注册过了!");
+							m_Socket.Close();
+							PostQuitMessage(0);
+							return;
+						}
+
+					}
+				
 				}
 				else
 				{
@@ -313,24 +379,9 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 	{
 		temp.account = (CString)m_pRecordSet->GetCollect("账号");
 		temp.name = (CString)m_pRecordSet->GetCollect("姓名");
-
-		m_Socket.my_Length = 0;
-		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
 		m_Socket.my_SendData = L"SearchFriendOnline";
 		m_Socket.my_SendData += temp.account;
-		m_Socket.my_Length = WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength(), NULL, 0, NULL, NULL);
-		WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength() + 1, m_Socket.my_Buffer, m_Socket.my_Length + 1, NULL, NULL);	//转换为字节为单位
-		m_Socket.my_Buffer[m_Socket.my_Length + 1] = '/0';
-		m_Socket.Send(m_Socket.my_Buffer, m_Socket.my_Length, 0);
-		m_Socket.my_Length = 0;
-		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
-
-		do
-		{
-			m_Socket.my_Length = m_Socket.Receive(m_Socket.my_Buffer, sizeof(m_Socket.my_Buffer));
-		} while (m_Socket.my_Buffer[0]=='\0');
-		CString IsOnline;
-		IsOnline.Format(L"%s", CString(m_Socket.my_Buffer));		//一定要把char[]用CString强制转换,否则CString temp里会有乱码
+		CString IsOnline = SendReceiveCommand();
 		if (IsOnline == L"Online") temp.isonline = 0;
 		else temp.isonline = 1;
 		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
@@ -344,4 +395,27 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 	}
 
 	m_ShowWaitDlg->DestroyWindow();
+}
+
+
+// 需要把命令放到my_SendData里
+CString C网络聊天室客户端Dlg::SendReceiveCommand()
+{
+	m_Socket.my_Length = 0;
+	memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+	m_Socket.my_Length = WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength(), NULL, 0, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength() + 1, m_Socket.my_Buffer, m_Socket.my_Length + 1, NULL, NULL);	//转换为字节为单位
+	m_Socket.my_Buffer[m_Socket.my_Length + 1] = '/0';
+	m_Socket.Send(m_Socket.my_Buffer, m_Socket.my_Length, 0);
+	m_Socket.my_Length = 0;
+	memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+
+	do
+	{
+		m_Socket.my_Length = m_Socket.Receive(m_Socket.my_Buffer, sizeof(m_Socket.my_Buffer));
+	} while (m_Socket.my_Buffer[0] == '\0');
+	CString IsOnline;
+	IsOnline.Format(L"%s", CString(m_Socket.my_Buffer));		//一定要把char[]用CString强制转换,否则CString temp里会有乱码
+
+	return IsOnline;
 }

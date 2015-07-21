@@ -6,6 +6,7 @@
 #include "NewSocket.h"
 #include <vector>
 #include "afxcmn.h"
+#include "LoginClass.h"
 #pragma once
 
 
@@ -63,4 +64,7 @@ public:
 	std::vector<FRIEND> friends;
 	CListCtrl m_FriendList;
 	CImageList *m_pImageList;
+
+	// 需要把命令放到my_SendData里
+	CString SendReceiveCommand();
 };
