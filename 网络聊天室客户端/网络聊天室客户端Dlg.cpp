@@ -26,6 +26,7 @@ void C网络聊天室客户端Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_FriendList);
+	DDX_Control(pDX, IDC_LIST1, m_FriendList);
 }
 
 BEGIN_MESSAGE_MAP(C网络聊天室客户端Dlg, CDialogEx)
@@ -49,6 +50,14 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
+	CRect rect;
+	// 获取编程语言列表视图控件的位置和大小   
+	m_FriendList.GetClientRect(&rect);
+	// 为列表视图控件添加全行选中和栅格风格   
+	m_FriendList.SetExtendedStyle(m_FriendList.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	// 为列表视图控件添加三列   
+	m_FriendList.InsertColumn(0, _T("Online"), LVCFMT_CENTER, rect.Width() / 3, 0);
+	m_FriendList.InsertColumn(1, _T("好友姓名"), LVCFMT_CENTER, rect.Width() / 3 * 2, 1);
 	
 	m_ShowWaitDlg = new ShowWaitDlg(this);
 	if (m_ShowWaitDlg != NULL)
@@ -282,7 +291,7 @@ UINT C网络聊天室客户端Dlg::WaitToConnectServer(LPVOID pParam)
 
 void C网络聊天室客户端Dlg::FreshFriendList()
 {
-	m_FriendList.ResetContent();
+	m_FriendList.DeleteAllItems();
 	m_pRecordSet->MoveFirst();
 	FRIEND temp;
 	while(!m_pRecordSet->adoEOF)
@@ -290,8 +299,8 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 		temp.account = (int)m_pRecordSet->GetCollect("账号");
 		temp.name = (CString)m_pRecordSet->GetCollect("姓名");
 		friends.push_back(temp);
-		m_FriendList.InsertString(0, temp.name);
 		m_pRecordSet->MoveNext();
 	} 
+
 	m_ShowWaitDlg->DestroyWindow();
 }

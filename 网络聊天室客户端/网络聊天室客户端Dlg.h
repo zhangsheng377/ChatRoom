@@ -5,6 +5,7 @@
 #include "ShowWaitDlg.h"
 #include "NewSocket.h"
 #include <vector>
+#include "afxcmn.h"
 //const int NameLengthMax = 10;
 #pragma once
 
@@ -52,7 +53,7 @@ public:
 	_ConnectionPtr m_pClientDB;				//连接ADO数据库,把生成的.tlh复制到项目文件夹中
 	_RecordsetPtr m_pRecordSet;
 	void FreshFriendList();
-	CListBox m_FriendList;
+	
 
 	class FRIEND {
 	public:
@@ -61,4 +62,5 @@ public:
 		CString name;
 	};
 	std::vector<FRIEND> friends;
+	CListCtrl m_FriendList;
 };
