@@ -63,14 +63,14 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	pBitmap2->Attach(hBitmap2);
 	m_pImageList->Add(pBitmap2, RGB(0, 0, 0));
 	m_FriendList.SetImageList(m_pImageList, LVSIL_SMALL);
-
+	
 	m_ShowWaitDlg = new ShowWaitDlg(this);
 	if (m_ShowWaitDlg != NULL)
 	{
 		m_ShowWaitDlg->Create(IDD_DIALOG1, this);
 	}
 	m_ShowWaitDlg->ShowWindow(SW_SHOW);			//正在连接服务器
-
+	
 	m_Socket.my_Port = 32137;
 	m_Socket.my_IP = "zhangsheng377.wicp.net";
 	m_Socket.ShutDown(2);
@@ -240,7 +240,7 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 				BOOL cmp = !memcmp(m_Socket.my_Buffer, "YouAreConnected", sizeof("YouAreConnected"));	//相等为0
 				if (cmp)
 				{
-					AfxMessageBox(L"服务器已连接!");
+					//AfxMessageBox(L"服务器已连接!");
 					m_ShowWaitDlg->DestroyWindow();
 					LoginClass m_Login;
 					CString answer;
