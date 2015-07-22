@@ -14,8 +14,7 @@
 
 UINT WaitToConnect(LPVOID lpParam)
 {
-	//CProgressCtrl *pInfo = (CProgressCtrl*)lpParam;
-	AfxMessageBox(L"进入线程!");
+	
 
 	return 0;
 }
@@ -442,6 +441,21 @@ void C网络聊天室客户端Dlg::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResu
 			m_ChatDlg->SetWindowTextW(temp);
 			m_ChatDlg->FriendNum = selected;
 			m_ChatDlg->Friend = &friends[selected];
+
+			ShowWaitDlg *m_ShowWaitDlg;
+			m_ShowWaitDlg = new ShowWaitDlg();
+			if (m_ShowWaitDlg != NULL)
+			{
+				m_ShowWaitDlg->Create(IDD_DIALOG1);
+				m_ShowWaitDlg->SetWindowTextW(L"正在从服务器获取好友地址!请勿操作!");
+				m_ShowWaitDlg->ShowWindow(SW_SHOW);
+			}
+			//......................................
+			m_ShowWaitDlg->SetWindowTextW(L"正在等待与好友进行p2p连接!请勿操作!");
+			//......................................
+			m_ShowWaitDlg->DestroyWindow();
+
+
 			m_ChatDlg->ShowWindow(SW_SHOW);
 
 			CWinThread *pThread = AfxBeginThread(WaitToConnect,NULL);
