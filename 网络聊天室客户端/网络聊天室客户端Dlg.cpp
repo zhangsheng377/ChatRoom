@@ -12,9 +12,16 @@
 #endif
 
 
+UINT WaitToConnect(LPVOID lpParam)
+{
+	//CProgressCtrl *pInfo = (CProgressCtrl*)lpParam;
+	AfxMessageBox(L"进入线程!");
+
+	return 0;
+}
+
+
 // C网络聊天室客户端Dlg 对话框
-
-
 
 C网络聊天室客户端Dlg::C网络聊天室客户端Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(C网络聊天室客户端Dlg::IDD, pParent)
@@ -354,14 +361,6 @@ void C网络聊天室客户端Dlg::OnNcPaint()
 }
 
 
-UINT C网络聊天室客户端Dlg::WaitToConnectServer(LPVOID pParam)
-{
-	lpthread temp = (lpthread)pParam;
-
-	return 0;
-}
-
-
 void C网络聊天室客户端Dlg::FreshFriendList()
 {
 	ShowWaitDlg *m_ShowWaitDlg;
@@ -444,6 +443,8 @@ void C网络聊天室客户端Dlg::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResu
 			m_ChatDlg->FriendNum = selected;
 			m_ChatDlg->Friend = &friends[selected];
 			m_ChatDlg->ShowWindow(SW_SHOW);
+
+			CWinThread *pThread = AfxBeginThread(WaitToConnect,NULL);
 		}
 		else
 		{

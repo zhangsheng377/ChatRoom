@@ -43,15 +43,14 @@ public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnNcPaint();
-	static UINT WaitToConnectServer(LPVOID pParam);
 	ShowWaitDlg *m_ShowWaitDlg;
-
+	/*
 	typedef struct ThreadInfo{
 		CNewSocket *m_Socket;
 		ShowWaitDlg *m_ShowWaitDlg;
 		C网络聊天室客户端Dlg *m_Wind;
 	}thread,*lpthread;
-
+	*/
 	_ConnectionPtr m_pClientDB;				//连接ADO数据库,把生成的.tlh复制到项目文件夹中
 	_RecordsetPtr m_pRecordSet;
 	void FreshFriendList();
