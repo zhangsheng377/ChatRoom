@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(C网络聊天室客户端Dlg, CDialogEx)
 	ON_WM_TIMER()
 	ON_WM_SHOWWINDOW()
 	ON_WM_NCPAINT()
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST1, &C网络聊天室客户端Dlg::OnNMDblclkList1)
 END_MESSAGE_MAP()
 
 
@@ -385,6 +386,7 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 		if (IsOnline == L"Online") temp.isonline = 0;
 		else temp.isonline = 1;
 		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+		temp.IsChatting = FALSE;
 
 		friends.push_back(temp);
 		m_pRecordSet->MoveNext();
@@ -418,4 +420,40 @@ CString C网络聊天室客户端Dlg::SendReceiveCommand()
 	IsOnline.Format(L"%s", CString(m_Socket.my_Buffer));		//一定要把char[]用CString强制转换,否则CString temp里会有乱码
 
 	return IsOnline;
+}
+
+
+void C网络聊天室客户端Dlg::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO:  在此添加控件通知处理程序代码
+	int selected = m_FriendList.GetNextItem(-1, LVNI_ALL | LVNI_SELECTED);
+	if (selected > -1)
+	{
+		if (!friends[selected].IsChatting)
+		{
+			friends[selected].IsChatting = TRUE;
+			ChatDlg *m_ChatDlg;
+			m_ChatDlg = new ChatDlg();
+			m_ChatDlg->Create(IDD_DIALOG3, this);
+			CString temp;
+			temp = L"与好友 ";
+			temp += friends[selected].name;
+			temp += L" 聊天中";
+			m_ChatDlg->SetWindowTextW(temp);
+			m_ChatDlg->FriendNum = selected;
+			m_ChatDlg->Friend = &friends[selected];
+			m_ChatDlg->ShowWindow(SW_SHOW);
+		}
+		else
+		{
+			AfxMessageBox(L"与该好友正在聊天中!");
+		}
+	}
+	else
+	{
+		AfxMessageBox(L"没有选中任何项!");
+	}
+
+	*pResult = 0;
 }

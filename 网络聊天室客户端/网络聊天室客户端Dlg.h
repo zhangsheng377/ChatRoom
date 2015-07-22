@@ -4,9 +4,11 @@
 
 #include "ShowWaitDlg.h"
 #include "NewSocket.h"
+#include "FRIEND.h"
 #include <vector>
 #include "afxcmn.h"
 #include "LoginClass.h"
+#include "ChatDlg.h"
 #pragma once
 
 
@@ -55,16 +57,12 @@ public:
 	void FreshFriendList();
 	
 
-	class FRIEND {
-	public:
-		CString account;
-		CString name;
-		int isonline;
-	};
+	
 	std::vector<FRIEND> friends;
 	CListCtrl m_FriendList;
 	CImageList *m_pImageList;
 
 	// 需要把命令放到my_SendData里
 	CString SendReceiveCommand();
+	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
 };

@@ -42,6 +42,12 @@
     <ClInclude Include="LoginClass.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ChatDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FRIEND.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="网络聊天室客户端.cpp">
@@ -60,6 +66,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LoginClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FRIEND.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

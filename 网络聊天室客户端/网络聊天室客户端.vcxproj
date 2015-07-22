@@ -104,6 +104,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChatDlg.h" />
+    <ClInclude Include="FRIEND.h" />
     <ClInclude Include="LoginClass.h" />
     <ClInclude Include="NewSocket.h" />
     <ClInclude Include="Resource.h" />
@@ -114,6 +116,8 @@
     <ClInclude Include="网络聊天室客户端Dlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChatDlg.cpp" />
+    <ClCompile Include="FRIEND.cpp" />
     <ClCompile Include="LoginClass.cpp" />
     <ClCompile Include="NewSocket.cpp" />
     <ClCompile Include="ShowWaitDlg.cpp" />
