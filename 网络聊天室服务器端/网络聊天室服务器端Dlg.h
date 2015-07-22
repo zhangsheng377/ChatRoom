@@ -28,4 +28,8 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+
+public:
+	_ConnectionPtr m_pServerDB;				//连接ADO数据库,把生成的.tlh复制到项目文件夹中
+	_RecordsetPtr m_pRecordSet;
 };

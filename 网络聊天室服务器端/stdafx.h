@@ -37,7 +37,7 @@
 #include <afxsock.h>            // MFC 套接字扩展
 
 
-
+#import "C:\Program Files\Common Files\System\ado\msado15.dll" no_namespace rename("EOF","adoEOF") rename("BOF","adoBOF")	//不能把这句话放到第一行
 
 
 

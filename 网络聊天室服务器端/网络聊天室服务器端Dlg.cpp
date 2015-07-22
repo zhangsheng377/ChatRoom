@@ -45,6 +45,49 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
+	//连接数据库
+	HRESULT hr;
+	try
+	{
+		//创建Connection对象
+		hr = m_pServerDB.CreateInstance("ADODB.Connection");
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pServerDB->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=res/ServerDB.mdb", "", "", adModeUnknown);
+			//连接数据库
+		}
+	}
+	catch (_com_error e)
+	{
+		CString errormessage;
+		errormessage.Format(L"连接数据库失败!\r\n错误信息:%s", e.ErrorMessage());
+		AfxMessageBox(errormessage);
+		//AfxMessageBox("fasadf");
+		PostQuitMessage(0);
+	}
+	_variant_t RecordsAffected;
+	m_pRecordSet = m_pServerDB->Execute("SELECT COUNT(*) FROM 用户表", &RecordsAffected, adCmdText);
+	_variant_t vIndex = (long)0;
+	_variant_t vCount = m_pRecordSet->GetCollect(vIndex);
+	int count = vCount.lVal;
+	m_pRecordSet->Close();
+	if (count == 0)
+	{
+		AfxMessageBox(L"数据表被破坏!");
+		PostQuitMessage(0);
+	}
+	m_pRecordSet.CreateInstance(__uuidof(Recordset));
+	try
+	{
+		m_pRecordSet->Open("SELECT * FROM 用户表", m_pServerDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+	}
+	catch (_com_error e)
+	{
+		CString errormessage;
+		errormessage.Format(L"打开数据表失败!\r\n错误信息:%s", e.ErrorMessage());
+		AfxMessageBox(errormessage);
+		PostQuitMessage(0);
+	}
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
