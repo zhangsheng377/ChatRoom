@@ -258,12 +258,14 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 						m_Socket.my_SendData = L"LoginMyName";
 						m_Socket.my_SendData += m_Login.my_Name;
 						answer = SendReceiveCommand();
-						if (answer == L"HereYouAre")
+						//if (answer == L"HereYouAre")
+						if(memcmp(m_Socket.my_Buffer, "HereYouAre", sizeof("HereYouAre")-1)==0)
 						{
 							m_Socket.my_SendData = L"LoginMyPassword";
 							m_Socket.my_SendData += m_Login.my_Password;
 							answer = SendReceiveCommand();
-							if (answer == L"YourPasswordIsRight")
+							//if (answer == L"YourPasswordIsRight")
+							if (memcmp(m_Socket.my_Buffer, "YourPasswordIsRight", sizeof("YourPasswordIsRight")-1) == 0)
 							{
 								ShowWindow(SW_SHOW);
 								FreshFriendList();
@@ -290,12 +292,14 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 						m_Socket.my_SendData = L"EnrollMyName";
 						m_Socket.my_SendData += m_Login.my_Name;
 						answer = SendReceiveCommand();
-						if (answer != L"HereYouAre")
+						//if (answer != L"HereYouAre")
+						if (memcmp(m_Socket.my_Buffer, "HereYouAre", sizeof("HereYouAre")-1) != 0)
 						{
 							m_Socket.my_SendData = L"EnrollMyPassword";
 							m_Socket.my_SendData += m_Login.my_Password;
 							answer = SendReceiveCommand();
-							if (answer == L"NowYouAreEnrolled")
+							//if (answer == L"NowYouAreEnrolled")
+							if (memcmp(m_Socket.my_Buffer, "NowYouAreEnrolled", sizeof("NowYouAreEnrolled")-1) == 0)
 							{
 								ShowWindow(SW_SHOW);
 								FreshFriendList();
@@ -381,8 +385,15 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 		m_Socket.my_SendData = L"SearchFriendOnline";
 		m_Socket.my_SendData += temp.account;
 		CString IsOnline = SendReceiveCommand();
-		if (IsOnline == L"Online") temp.isonline = 0;
-		else temp.isonline = 1;
+		//if (IsOnline == L"Online")
+		if (memcmp(m_Socket.my_Buffer, "Online", sizeof("Online")-1) == 0)
+		{
+			temp.isonline = 0;
+		}
+		else
+		{
+			temp.isonline = 1;
+		}
 		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
 		temp.IsChatting = FALSE;
 
@@ -405,7 +416,7 @@ CString C网络聊天室客户端Dlg::SendReceiveCommand()
 	memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
 	m_Socket.my_Length = WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength(), NULL, 0, NULL, NULL);
 	WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength() + 1, m_Socket.my_Buffer, m_Socket.my_Length + 1, NULL, NULL);	//转换为字节为单位
-	m_Socket.my_Buffer[m_Socket.my_Length + 1] = '/0';
+	m_Socket.my_Buffer[m_Socket.my_Length + 1] = '\0';
 	m_Socket.Send(m_Socket.my_Buffer, m_Socket.my_Length, 0);
 	m_Socket.my_Length = 0;
 	memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
