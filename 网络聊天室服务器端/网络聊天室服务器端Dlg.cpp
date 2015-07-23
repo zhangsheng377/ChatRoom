@@ -65,7 +65,9 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 		//AfxMessageBox("fasadf");
 		PostQuitMessage(0);
 	}
+	
 	_variant_t RecordsAffected;
+	m_pServerDB->Execute("UPDATE 用户表 SET 在线 = '0'", &RecordsAffected, adCmdText);
 	m_pRecordSet = m_pServerDB->Execute("SELECT COUNT(*) FROM 用户表", &RecordsAffected, adCmdText);
 	_variant_t vIndex = (long)0;
 	_variant_t vCount = m_pRecordSet->GetCollect(vIndex);
@@ -76,6 +78,7 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 		AfxMessageBox(L"数据表被破坏!");
 		PostQuitMessage(0);
 	}
+
 	m_pRecordSet.CreateInstance(__uuidof(Recordset));
 	try
 	{
