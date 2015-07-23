@@ -92,6 +92,30 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 		PostQuitMessage(0);
 	}
 
+
+	//监听Socket
+	if (m_ListenSocket.m_hSocket == INVALID_SOCKET)
+	{
+		BOOL bFlag = m_ListenSocket.Create(5088, SOCK_STREAM, FD_ACCEPT);
+		if (!bFlag)
+		{
+			AfxMessageBox(L"Socket创建失败!");
+			m_ListenSocket.Close();
+			PostQuitMessage(0);
+		}
+	}
+	if (!m_ListenSocket.Listen(1))
+	{
+		int nErrorCode = m_ListenSocket.GetLastError();
+		if (nErrorCode != WSAEWOULDBLOCK)
+		{
+			AfxMessageBox(L"Socket错误!");
+			m_ListenSocket.Close();
+			PostQuitMessage(0);
+		}
+	}
+
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

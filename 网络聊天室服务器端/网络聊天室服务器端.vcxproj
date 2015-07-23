@@ -134,4 +134,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="网络聊天室服务器端.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

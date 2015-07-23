@@ -9,7 +9,7 @@ public:
 	ListenSocket();
 	~ListenSocket();
 
-	std::vector<NewSocket> m_Sockets;
+	std::vector<NewSocket*> m_pSockets;
 	virtual void OnAccept(int nErrorCode);
 };
 
