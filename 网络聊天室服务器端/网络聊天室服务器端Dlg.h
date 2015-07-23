@@ -2,6 +2,7 @@
 // 网络聊天室服务器端Dlg.h : 头文件
 //
 #include "ListenSocket.h"
+//#include <vector>
 
 #pragma once
 
@@ -35,4 +36,5 @@ public:
 	_RecordsetPtr m_pRecordSet;
 
 	ListenSocket m_ListenSocket;
+	//std::vector<NewSocket*> m_pNewSockets;
 };

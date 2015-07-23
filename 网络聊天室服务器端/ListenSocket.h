@@ -9,7 +9,9 @@ public:
 	ListenSocket();
 	~ListenSocket();
 
-	std::vector<NewSocket*> m_pSockets;
+	//NewSocket* m_pSocket;
+	std::vector<NewSocket*> m_pNewSockets;
+	//BOOL Accepted;
 	virtual void OnAccept(int nErrorCode);
 };
 

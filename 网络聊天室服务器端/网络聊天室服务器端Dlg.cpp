@@ -11,10 +11,19 @@
 #define new DEBUG_NEW
 #endif
 
+/*
+UINT ListenThread(LPVOID lpParam)
+{
+	//AfxMessageBox(L"进入线程!");
+	std::vector<ListenSocket*> *pListenSockets = (std::vector<ListenSocket*>*)lpParam;
+	int i = 0;
+	
+	
+	return 0;
+}
+*/
 
 // C网络聊天室服务器端Dlg 对话框
-
-
 
 C网络聊天室服务器端Dlg::C网络聊天室服务器端Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(C网络聊天室服务器端Dlg::IDD, pParent)
@@ -92,8 +101,7 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 		PostQuitMessage(0);
 	}
 
-
-	//监听Socket
+	
 	if (m_ListenSocket.m_hSocket == INVALID_SOCKET)
 	{
 		BOOL bFlag = m_ListenSocket.Create(5088, SOCK_STREAM, FD_ACCEPT);
@@ -101,9 +109,11 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 		{
 			AfxMessageBox(L"Socket创建失败!");
 			m_ListenSocket.Close();
+			//delete ptemp;
 			PostQuitMessage(0);
 		}
 	}
+
 	if (!m_ListenSocket.Listen(1))
 	{
 		int nErrorCode = m_ListenSocket.GetLastError();
@@ -113,8 +123,14 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 			m_ListenSocket.Close();
 			PostQuitMessage(0);
 		}
+		AfxMessageBox(L"Socket堵塞!");
+		//delete ptemp;
 	}
 
+
+
+	//CWinThread *pThread = AfxBeginThread(ListenThread, &m_pListenSockets);
+	//AfxMessageBox(L"进程下一句!");
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
