@@ -101,6 +101,7 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 		AfxMessageBox(errormessage);
 		PostQuitMessage(0);
 	}
+	//if (!m_pRecordSet->adoEOF) AfxMessageBox(L"找到了!");
 	m_pRecordSet->Close();
 
 	
