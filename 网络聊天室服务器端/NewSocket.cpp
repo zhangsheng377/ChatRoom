@@ -20,6 +20,7 @@ NewSocket::~NewSocket()
 void NewSocket::OnReceive(int nErrorCode)
 {
 	// TODO:  在此添加专用代码和/或调用基类
+	memset(m_Buffer, 0, sizeof(m_Buffer));
 	m_Length = Receive(m_Buffer, sizeof(m_Buffer), 0);
 
 	C网络聊天室服务器端App *pApp = (C网络聊天室服务器端App*)AfxGetApp();
@@ -77,12 +78,13 @@ void NewSocket::OnReceive(int nErrorCode)
 				pDlg->m_ListBox.InsertString(0, temp);
 				if (memcmp(m_Buffer, "LoginMyPassword", sizeof("LoginMyPassword") - 1) == 0)
 				{
-					CString tmp1(&m_Buffer[sizeof("LoginMyPassword") - 1]);
-					if ((CString)pDlg->m_pRecordSet->GetCollect("密码") == tmp1)
+					CString tmp6(&m_Buffer[sizeof("LoginMyPassword") - 1]);
+					if ((CString)pDlg->m_pRecordSet->GetCollect("密码") == tmp6)
 					{
 						my_SendData = L"YourPasswordIsRight";
 						pDlg->m_pRecordSet->PutCollect("在线", _variant_t(L"Online"));
 						pDlg->m_pRecordSet->Update();
+						my_Name = tmp1;
 					}
 					else
 					{
@@ -209,6 +211,35 @@ void NewSocket::OnReceive(int nErrorCode)
 
 					pDlg->m_pRecordSet->Close();
 				}
+				else
+				{
+					if (memcmp(m_Buffer, "IAmQuit", sizeof("IAmQuit") - 1) == 0)
+					{
+						pDlg->m_pRecordSet.CreateInstance(__uuidof(Recordset));
+						try
+						{
+							CString command4 = L"SELECT * FROM 用户表 WHERE 姓名 = '";command4 += my_Name;command4 += L"'";
+							pDlg->m_pRecordSet->Open(_variant_t(command4), pDlg->m_pServerDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+						}
+						catch (_com_error e)
+						{
+							CString errormessage;
+							errormessage.Format(L"打开数据表失败!\r\n错误信息:%s", e.ErrorMessage());
+							AfxMessageBox(errormessage);
+							//发出退出命令给客户端
+							//......
+							PostQuitMessage(0);
+						}
+						if (!pDlg->m_pRecordSet->adoEOF)
+						{
+							pDlg->m_pRecordSet->PutCollect("在线", _variant_t(L"Offline"));
+							pDlg->m_pRecordSet->Update();
+							AfxMessageBox(L"已断开连接!");
+						}
+						
+						pDlg->m_pRecordSet->Close();
+					}
+				}
 			}
 		}
 	}
@@ -242,4 +273,14 @@ void NewSocket::OnSend(int nErrorCode)
 	AsyncSelect(FD_READ);
 
 	CAsyncSocket::OnSend(nErrorCode);
+}
+
+
+void NewSocket::OnClose(int nErrorCode)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	//AfxMessageBox(L"已断开连接!");
+	
+
+	CAsyncSocket::OnClose(nErrorCode);
 }

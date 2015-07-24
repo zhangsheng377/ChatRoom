@@ -12,5 +12,7 @@ public:
 	CString my_SendData;
 	virtual void OnReceive(int nErrorCode);
 	virtual void OnSend(int nErrorCode);
+	CString my_Name;
+	virtual void OnClose(int nErrorCode);
 };
 

@@ -64,4 +64,5 @@ public:
 	// 需要把命令放到my_SendData里
 	CString SendReceiveCommand();
 	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
+	virtual void OnCancel();
 };

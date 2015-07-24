@@ -501,3 +501,21 @@ void C网络聊天室客户端Dlg::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResu
 
 	*pResult = 0;
 }
+
+
+void C网络聊天室客户端Dlg::OnCancel()
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	m_Socket.my_SendData = L"IAmQuit";
+
+	m_Socket.my_Length = 0;
+	memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+	m_Socket.my_Length = WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength(), NULL, 0, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength() + 1, m_Socket.my_Buffer, m_Socket.my_Length + 1, NULL, NULL);	//转换为字节为单位
+	m_Socket.my_Buffer[m_Socket.my_Length + 1] = '\0';
+	m_Socket.Send(m_Socket.my_Buffer, m_Socket.my_Length, 0);
+
+	m_Socket.Close();
+
+	CDialogEx::OnCancel();
+}
