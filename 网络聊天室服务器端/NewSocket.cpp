@@ -189,7 +189,16 @@ void NewSocket::OnReceive(int nErrorCode)
 						if (memcmp(m_Buffer, "EnrollMyPassword", sizeof("EnrollMyPassword") - 1) == 0)
 						{
 							CString password(&m_Buffer[sizeof("EnrollMyPassword") - 1]);
-							
+							pDlg->m_pRecordSet->AddNew();
+							pDlg->my_MaxAccount++;
+							CString MaxAccount;MaxAccount.Format(L"%d", pDlg->my_MaxAccount);
+							pDlg->m_pRecordSet->PutCollect("ÕËºÅ",_variant_t(MaxAccount));
+							pDlg->m_pRecordSet->PutCollect("ÐÕÃû", _variant_t(name));
+							pDlg->m_pRecordSet->PutCollect("ÃÜÂë", _variant_t(password));
+							pDlg->m_pRecordSet->PutCollect("ÔÚÏß", _variant_t(L"Online"));
+							pDlg->m_pRecordSet->Update();
+
+							my_SendData = L"NowYouAreEnrolled";
 						}
 						else
 						{

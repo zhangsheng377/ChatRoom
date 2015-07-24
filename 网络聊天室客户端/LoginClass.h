@@ -21,4 +21,6 @@ protected:
 public:
 	CString my_Name;
 	CString my_Password;
+	afx_msg void OnEnChangeEdit1();
+	afx_msg void OnEnChangeEdit2();
 };
