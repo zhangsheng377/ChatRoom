@@ -34,6 +34,7 @@ C网络聊天室服务器端Dlg::C网络聊天室服务器端Dlg(CWnd* pParent /*=NULL*/)
 void C网络聊天室服务器端Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_ListBox);
 }
 
 BEGIN_MESSAGE_MAP(C网络聊天室服务器端Dlg, CDialogEx)

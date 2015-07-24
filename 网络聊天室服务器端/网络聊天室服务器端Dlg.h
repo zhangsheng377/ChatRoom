@@ -2,7 +2,8 @@
 // 网络聊天室服务器端Dlg.h : 头文件
 //
 #include "ListenSocket.h"
-//#include <vector>
+#include "afxwin.h"
+#include "resource.h"
 
 #pragma once
 
@@ -37,4 +38,5 @@ public:
 
 	ListenSocket m_ListenSocket;
 	//std::vector<NewSocket*> m_pNewSockets;
+	CListBox m_ListBox;
 };
