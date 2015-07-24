@@ -145,7 +145,7 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 		m_Socket.Close();
 		PostQuitMessage(0);
 	}
-	
+	m_pRecordSet->Close();
 
 
 
@@ -376,6 +376,21 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 	}
 	
 	m_FriendList.DeleteAllItems();
+
+	m_pRecordSet.CreateInstance(__uuidof(Recordset));
+	try
+	{
+		m_pRecordSet->Open("SELECT * FROM 好友表", m_pClientDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+	}
+	catch (_com_error e)
+	{
+		CString errormessage;
+		errormessage.Format(L"打开数据表失败!\r\n错误信息:%s", e.ErrorMessage());
+		AfxMessageBox(errormessage);
+		m_Socket.Close();
+		PostQuitMessage(0);
+	}
+
 	m_pRecordSet->MoveFirst();
 	FRIEND temp;
 	while(!m_pRecordSet->adoEOF)
@@ -400,6 +415,9 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 		friends.push_back(temp);
 		m_pRecordSet->MoveNext();
 	} 
+
+	m_pRecordSet->Close();
+
 	for (UINT i = 0;i < friends.size();i++)
 	{
 		m_FriendList.InsertItem(i, friends[i].name, friends[i].isonline);
