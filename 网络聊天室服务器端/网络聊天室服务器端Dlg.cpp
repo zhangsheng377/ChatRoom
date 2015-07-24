@@ -101,6 +101,7 @@ BOOL CÍøÂçÁÄÌìÊÒ·þÎñÆ÷¶ËDlg::OnInitDialog()
 		AfxMessageBox(errormessage);
 		PostQuitMessage(0);
 	}
+	m_pRecordSet->Close();
 
 	
 	if (m_ListenSocket.m_hSocket == INVALID_SOCKET)
