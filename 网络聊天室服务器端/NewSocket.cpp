@@ -35,9 +35,7 @@ void NewSocket::OnReceive(int nErrorCode)
 	{
 		if (memcmp(m_Buffer, "LoginMyName", sizeof("LoginMyName")-1) == 0)
 		{
-			char tchar[4096];int i=0;memset(tchar, 0, sizeof(tchar));
-			memcpy(tchar, &m_Buffer[sizeof("LoginMyName")-1], 1000);
-			CString tmp1(tchar), temp1 = L"姓名是:";temp1 += tmp1;
+			CString tmp1(&m_Buffer[sizeof("LoginMyName") - 1]), temp1 = L"姓名是:";temp1 += tmp1;
 			pDlg->m_ListBox.InsertString(0, temp1);
 
 			my_SendData = L"HereYouAre";
