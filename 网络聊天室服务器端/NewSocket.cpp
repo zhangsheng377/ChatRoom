@@ -83,16 +83,12 @@ void NewSocket::OnReceive(int nErrorCode)
 						my_SendData = L"YourPasswordIsRight";
 						pDlg->m_pRecordSet->PutCollect("在线", _variant_t(L"Online"));
 						pDlg->m_pRecordSet->Update();
-						//_variant_t RecordsAffected;
-						//pDlg->m_pServerDB->Execute("UPDATE 用户表 SET 在线 = '1' WHERE 姓名 = '张胜东'", &RecordsAffected, adCmdText);
 					}
 					else
 					{
 						my_SendData = L"YourPasswordIsWrong";
 						pDlg->m_pRecordSet->PutCollect("在线", _variant_t(L"Offline"));
 						pDlg->m_pRecordSet->Update();
-						//_variant_t RecordsAffected;
-						//pDlg->m_pServerDB->Execute("UPDATE 用户表 SET 在线 = '0' WHERE 姓名 = '张胜东'", &RecordsAffected, adCmdText);
 					}
 				}
 			}
@@ -141,6 +137,69 @@ void NewSocket::OnReceive(int nErrorCode)
 				}
 
 				pDlg->m_pRecordSet->Close();
+			}
+			else
+			{
+				if (memcmp(m_Buffer, "EnrollMyName", sizeof("EnrollMyName") - 1) == 0)
+				{
+					CString tmp4(&m_Buffer[sizeof("EnrollMyName") - 1]);
+					pDlg->m_pRecordSet.CreateInstance(__uuidof(Recordset));
+					try
+					{
+						CString command4 = L"SELECT * FROM 用户表 WHERE 姓名 = '";command4 += tmp4;command4 += L"'";
+						pDlg->m_pRecordSet->Open(_variant_t(command4), pDlg->m_pServerDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+					}
+					catch (_com_error e)
+					{
+						CString errormessage;
+						errormessage.Format(L"打开数据表失败!\r\n错误信息:%s", e.ErrorMessage());
+						AfxMessageBox(errormessage);
+						//发出退出命令给客户端
+						//......
+						PostQuitMessage(0);
+					}
+					if (!pDlg->m_pRecordSet->adoEOF)
+					{
+						my_SendData = L"HereYouAre";
+					}
+					else
+					{
+						my_SendData = L"YouAreNotHere";
+						CString name = tmp4;
+						if (my_SendData != "")
+						{
+							int Length = 0;
+							char Buffer[4096];
+							memset(Buffer, 0, sizeof(Buffer));
+							Length = WideCharToMultiByte(CP_ACP, 0, my_SendData, my_SendData.GetLength(), NULL, 0, NULL, NULL);
+							WideCharToMultiByte(CP_ACP, 0, my_SendData, my_SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
+							Buffer[Length + 1] = '\0';
+							Send(Buffer, Length, 0);
+							CString tmp(Buffer), temp = L"发送出:";temp += tmp;
+							pDlg->m_ListBox.InsertString(0, temp);
+						}
+
+						memset(m_Buffer, 0, sizeof(m_Buffer));
+						do
+						{
+							m_Length = Receive(m_Buffer, sizeof(m_Buffer), 0);
+						} while (m_Buffer[0] == '\0');
+						CString tmp(m_Buffer), temp = L"接收到:";temp += tmp;
+						pDlg->m_ListBox.InsertString(0, temp);
+						if (memcmp(m_Buffer, "EnrollMyPassword", sizeof("EnrollMyPassword") - 1) == 0)
+						{
+							CString password(&m_Buffer[sizeof("EnrollMyPassword") - 1]);
+							
+						}
+						else
+						{
+							//注册过程未完成
+							//......
+						}
+					}
+
+					pDlg->m_pRecordSet->Close();
+				}
 			}
 		}
 	}

@@ -35,6 +35,7 @@ protected:
 public:
 	_ConnectionPtr m_pServerDB;				//连接ADO数据库,把生成的.tlh复制到项目文件夹中
 	_RecordsetPtr m_pRecordSet;
+	int my_MaxAccount;
 
 	ListenSocket m_ListenSocket;
 	//std::vector<NewSocket*> m_pNewSockets;

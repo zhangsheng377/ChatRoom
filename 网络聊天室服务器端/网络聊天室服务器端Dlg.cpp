@@ -92,7 +92,7 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 	m_pRecordSet.CreateInstance(__uuidof(Recordset));
 	try
 	{
-		m_pRecordSet->Open("SELECT * FROM 用户表", m_pServerDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+		m_pRecordSet->Open("SELECT * FROM 用户表 ORDER BY 账号 ASC", m_pServerDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
 	}
 	catch (_com_error e)
 	{
@@ -101,7 +101,21 @@ BOOL C网络聊天室服务器端Dlg::OnInitDialog()
 		AfxMessageBox(errormessage);
 		PostQuitMessage(0);
 	}
-	//if (!m_pRecordSet->adoEOF) AfxMessageBox(L"找到了!");
+	if (!m_pRecordSet->adoEOF)
+	{
+		m_pRecordSet->MoveLast();
+		CString MaxAccount;
+		MaxAccount = (CString)m_pRecordSet->GetCollect("账号");
+		int Length = 0;char Buffer[4096];memset(Buffer, 0, sizeof(Buffer));
+		Length = WideCharToMultiByte(CP_ACP, 0, MaxAccount, MaxAccount.GetLength(), NULL, 0, NULL, NULL);
+		WideCharToMultiByte(CP_ACP, 0, MaxAccount, MaxAccount.GetLength() + 1, Buffer, Length + 1, NULL, NULL);//转换为字节为单位
+		Buffer[Length + 1] = '\0';
+		my_MaxAccount = atoi(Buffer);
+	}
+	else
+	{
+		AfxMessageBox(L"数据表为空!");
+	}
 	m_pRecordSet->Close();
 
 	
