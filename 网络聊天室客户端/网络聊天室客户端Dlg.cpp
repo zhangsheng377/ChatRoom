@@ -224,7 +224,7 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 				m_Socket.Send("AmIConnected", sizeof("AmIConnected") - 1);	//不减1就会多发一个.点
 				m_Socket.my_TryCount = 0;
 				SetTimer(2, 1000, NULL);
-				m_Socket.AsyncSelect(FD_READ);
+				//m_Socket.AsyncSelect(FD_READ);
 			}
 			return;
 		}
@@ -285,6 +285,7 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 							PostQuitMessage(0);
 							return;
 						}
+						//m_Socket.AsyncSelect(FD_READ);
 					}
 					else
 					{
@@ -331,6 +332,7 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 					return;
 				}
 			}	
+			m_Socket.AsyncSelect(FD_READ);
 		}
 		break;
 	default:
@@ -424,6 +426,7 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 	}
 
 	m_ShowWaitDlg->DestroyWindow();
+	m_Socket.AsyncSelect(FD_READ);
 }
 
 

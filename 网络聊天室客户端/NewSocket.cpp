@@ -74,6 +74,8 @@ void CNewSocket::OnReceive(int nErrorCode)
 				pDlg->m_FriendList.InsertItem(i, pDlg->friends[i].name, pDlg->friends[i].isonline);
 			}
 		}
+
+		AsyncSelect(FD_READ);
 	}
 	else
 	{
@@ -109,6 +111,8 @@ void CNewSocket::OnReceive(int nErrorCode)
 				}
 			}
 		}
+
+		AsyncSelect(FD_READ);
 	}
 
 

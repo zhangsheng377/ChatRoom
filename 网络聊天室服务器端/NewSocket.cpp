@@ -319,6 +319,7 @@ void NewSocket::OnReceive(int nErrorCode)
 							//AfxMessageBox(L"已断开连接!");
 							pDlg->m_ListenSocket.my_NowAccount = (CString)pDlg->m_pRecordSet->GetCollect("账号");
 							CWinThread *pThread = AfxBeginThread(BroadcastOffline, pDlg);
+							Close();
 						}
 						
 						pDlg->m_pRecordSet->Close();
