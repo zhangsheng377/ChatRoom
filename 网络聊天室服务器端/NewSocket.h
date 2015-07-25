@@ -13,6 +13,8 @@ public:
 	virtual void OnReceive(int nErrorCode);
 	virtual void OnSend(int nErrorCode);
 	CString my_Name;
+	CString my_Account;
+
 	virtual void OnClose(int nErrorCode);
 };
 

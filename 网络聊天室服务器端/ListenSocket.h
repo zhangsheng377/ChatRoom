@@ -11,6 +11,7 @@ public:
 
 	//NewSocket* m_pSocket;
 	std::vector<NewSocket*> m_pNewSockets;
+	CString my_NowAccount;
 	//BOOL Accepted;
 	virtual void OnAccept(int nErrorCode);
 };

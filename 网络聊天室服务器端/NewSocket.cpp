@@ -4,6 +4,53 @@
 #include "网络聊天室服务器端.h"
 
 
+UINT BroadcastOnline(LPVOID lpParam)
+{
+	C网络聊天室服务器端Dlg *pDlg = (C网络聊天室服务器端Dlg*)lpParam;
+	ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
+	std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
+	int Length = 0;char Buffer[4096];CString SendData;
+	for (UINT i = 0;i < pVectorNewSocket->size();i++)
+	{
+		if ((*pVectorNewSocket)[i]->my_Account != pListenSocket->my_NowAccount)
+		{
+			SendData = L"FriendIsOnline";SendData += pListenSocket->my_NowAccount;
+			Length = 0;memset(Buffer, 0, sizeof(Buffer));
+			Length = WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength(), NULL, 0, NULL, NULL);
+			WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
+			Buffer[Length + 1] = '\0';
+			(*pVectorNewSocket)[i]->Send(Buffer, Length, 0);
+
+			CString tmp(Buffer), temp = L"发送出:";temp += tmp;
+			pDlg->m_ListBox.InsertString(0, temp);
+		}
+	}
+}
+
+UINT BroadcastOffline(LPVOID lpParam)
+{
+	C网络聊天室服务器端Dlg *pDlg = (C网络聊天室服务器端Dlg*)lpParam;
+	ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
+	std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
+	int Length = 0;char Buffer[4096];CString SendData;
+	for (UINT i = 0;i < pVectorNewSocket->size();i++)
+	{
+		if ((*pVectorNewSocket)[i]->my_Account != pListenSocket->my_NowAccount)
+		{
+			SendData = L"FriendIsOffline";SendData += pListenSocket->my_NowAccount;
+			Length = 0;memset(Buffer, 0, sizeof(Buffer));
+			Length = WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength(), NULL, 0, NULL, NULL);
+			WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
+			Buffer[Length + 1] = '\0';
+			(*pVectorNewSocket)[i]->Send(Buffer, Length, 0);
+
+			CString tmp(Buffer), temp = L"发送出:";temp += tmp;
+			pDlg->m_ListBox.InsertString(0, temp);
+		}
+	}
+}
+
+
 NewSocket::NewSocket()
 {
 	m_Length = 0;
@@ -87,6 +134,10 @@ void NewSocket::OnReceive(int nErrorCode)
 							pDlg->m_pRecordSet->PutCollect("在线", _variant_t(L"Online"));
 							pDlg->m_pRecordSet->Update();
 							my_Name = tmp1;
+							my_Account = (CString)pDlg->m_pRecordSet->GetCollect("账号");
+
+							pDlg->m_ListenSocket.my_NowAccount = my_Account;
+							CWinThread *pThread = AfxBeginThread(BroadcastOnline, pDlg);
 						}
 						else
 						{
@@ -255,10 +306,13 @@ void NewSocket::OnReceive(int nErrorCode)
 						{
 							pDlg->m_pRecordSet->PutCollect("在线", _variant_t(L"Offline"));
 							pDlg->m_pRecordSet->Update();
-							AfxMessageBox(L"已断开连接!");
+							//AfxMessageBox(L"已断开连接!");
+							pDlg->m_ListenSocket.my_NowAccount = (CString)pDlg->m_pRecordSet->GetCollect("账号");
+							CWinThread *pThread = AfxBeginThread(BroadcastOffline, pDlg);
 						}
 						
 						pDlg->m_pRecordSet->Close();
+						my_SendData = L"";
 					}
 				}
 			}
