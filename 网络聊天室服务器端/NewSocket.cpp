@@ -10,7 +10,7 @@ UINT BroadcastOnline(LPVOID lpParam)
 	ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
 	std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
 	int Length = 0;char Buffer[4096];CString SendData;
-	for (UINT i = 0;i < pVectorNewSocket->size();i++)
+	for (int i = 0;i < pVectorNewSocket->size();i++)
 	{
 		if ((*pVectorNewSocket)[i]->my_Account != pListenSocket->my_NowAccount)
 		{
@@ -21,7 +21,7 @@ UINT BroadcastOnline(LPVOID lpParam)
 			Buffer[Length + 1] = '\0';
 			(*pVectorNewSocket)[i]->Send(Buffer, Length, 0);
 
-			CString tmp(Buffer), temp = L"发送出:";temp += tmp;
+			CString tmp(Buffer), temp = L"向";temp += (*pVectorNewSocket)[i]->my_Account;temp += L"发出:";temp += tmp;
 			pDlg->m_ListBox.InsertString(0, temp);
 		}
 	}
@@ -33,7 +33,8 @@ UINT BroadcastOffline(LPVOID lpParam)
 	ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
 	std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
 	int Length = 0;char Buffer[4096];CString SendData;
-	for (UINT i = 0;i < pVectorNewSocket->size();i++)
+	auto e = pVectorNewSocket->begin();
+	for (int i = 0;i < pVectorNewSocket->size();i++)
 	{
 		if ((*pVectorNewSocket)[i]->my_Account != pListenSocket->my_NowAccount)
 		{
@@ -44,8 +45,17 @@ UINT BroadcastOffline(LPVOID lpParam)
 			Buffer[Length + 1] = '\0';
 			(*pVectorNewSocket)[i]->Send(Buffer, Length, 0);
 
-			CString tmp(Buffer), temp = L"发送出:";temp += tmp;
+			CString tmp(Buffer), temp = L"向";temp += (*pVectorNewSocket)[i]->my_Account;temp += L"发出:";temp += tmp;
 			pDlg->m_ListBox.InsertString(0, temp);
+		}
+		if ((*e)->my_Account == pListenSocket->my_NowAccount)
+		{
+			pVectorNewSocket->erase(e);
+			i--;
+		}
+		else
+		{
+			e++;
 		}
 	}
 }
