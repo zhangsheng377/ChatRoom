@@ -10,6 +10,7 @@ UINT BroadcastOnline(LPVOID lpParam)
 	ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
 	std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
 	int Length = 0;char Buffer[4096];CString SendData;
+	/*
 	for (int i = 0;i < pVectorNewSocket->size();i++)
 	{
 		if ((*pVectorNewSocket)[i]->my_Account != pListenSocket->my_NowAccount)
@@ -25,6 +26,32 @@ UINT BroadcastOnline(LPVOID lpParam)
 			pDlg->m_ListBox.InsertString(0, temp);
 		}
 	}
+	*/
+	std::vector<NewSocket*>::iterator t;
+	for (std::vector<NewSocket*>::iterator e = (*pVectorNewSocket).begin();e != (*pVectorNewSocket).end();e++)
+	{
+		if ((*e)->my_Account != pListenSocket->my_NowAccount)
+		{
+			if ((*e)->my_Account != L"")
+			{
+				SendData = L"FriendIsOnline";SendData += pListenSocket->my_NowAccount;
+				Length = 0;memset(Buffer, 0, sizeof(Buffer));
+				Length = WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength(), NULL, 0, NULL, NULL);
+				WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
+				Buffer[Length + 1] = '\0';
+				(*e)->Send(Buffer, Length, 0);
+
+				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += L"发出:";temp += tmp;
+				pDlg->m_ListBox.InsertString(0, temp);
+			}
+			else
+			{
+				t = e - 1;
+				(*pVectorNewSocket).erase(e);
+				e = t;
+			}
+		}
+	}
 }
 
 UINT BroadcastOffline(LPVOID lpParam)
@@ -33,7 +60,8 @@ UINT BroadcastOffline(LPVOID lpParam)
 	ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
 	std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
 	int Length = 0;char Buffer[4096];CString SendData;
-	auto e = pVectorNewSocket->begin();
+	//auto e = pVectorNewSocket->begin();
+	/*
 	for (int i = 0;i < pVectorNewSocket->size();i++)
 	{
 		if ((*pVectorNewSocket)[i]->my_Account != pListenSocket->my_NowAccount)
@@ -56,6 +84,38 @@ UINT BroadcastOffline(LPVOID lpParam)
 		else
 		{
 			e++;
+		}
+	}
+	*/
+	std::vector<NewSocket*>::iterator t;
+	for (std::vector<NewSocket*>::iterator e = (*pVectorNewSocket).begin();e != (*pVectorNewSocket).end();e++)
+	{
+		if ((*e)->my_Account != pListenSocket->my_NowAccount)
+		{
+			if ((*e)->my_Account != L"")
+			{
+				SendData = L"FriendIsOffline";SendData += pListenSocket->my_NowAccount;
+				Length = 0;memset(Buffer, 0, sizeof(Buffer));
+				Length = WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength(), NULL, 0, NULL, NULL);
+				WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
+				Buffer[Length + 1] = '\0';
+				(*e)->Send(Buffer, Length, 0);
+
+				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += L"发出:";temp += tmp;
+				pDlg->m_ListBox.InsertString(0, temp);
+			}
+			else
+			{
+				t = e - 1;
+				(*pVectorNewSocket).erase(e);
+				e = t;
+			}
+		}
+		else
+		{
+			t = e - 1;
+			(*pVectorNewSocket).erase(e);
+			e = t;
 		}
 	}
 }
@@ -319,7 +379,7 @@ void NewSocket::OnReceive(int nErrorCode)
 							//AfxMessageBox(L"已断开连接!");
 							pDlg->m_ListenSocket.my_NowAccount = (CString)pDlg->m_pRecordSet->GetCollect("账号");
 							CWinThread *pThread = AfxBeginThread(BroadcastOffline, pDlg);
-							Close();
+							//Close();
 						}
 						
 						pDlg->m_pRecordSet->Close();

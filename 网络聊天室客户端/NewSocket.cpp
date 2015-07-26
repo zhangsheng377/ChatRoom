@@ -27,7 +27,7 @@ void CNewSocket::OnConnect(int nErrorCode)
 	if (nErrorCode == 0)
 	{
 		my_Connected = TRUE;
-		AsyncSelect(FD_READ);
+		//AsyncSelect(FD_READ);
 	}
 
 	CAsyncSocket::OnConnect(nErrorCode);
@@ -43,6 +43,9 @@ void CNewSocket::OnReceive(int nErrorCode)
 
 	CÍøÂçÁÄÌìÊÒ¿Í»§¶ËApp *pApp = (CÍøÂçÁÄÌìÊÒ¿Í»§¶ËApp*)AfxGetApp();
 	CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg *pDlg = (CÍøÂçÁÄÌìÊÒ¿Í»§¶ËDlg*)pApp->m_pMainWnd;
+	CString tempcommand(my_Buffer);
+	pDlg->m_CommandListBox.InsertString(0, tempcommand);
+	
 	if (memcmp(my_Buffer, "FriendIsOnline", sizeof("FriendIsOnline") - 1) == 0)
 	{
 		CString Account(&my_Buffer[sizeof("FriendIsOnline") - 1]);
@@ -75,7 +78,7 @@ void CNewSocket::OnReceive(int nErrorCode)
 			}
 		}
 
-		AsyncSelect(FD_READ);
+		//AsyncSelect(FD_READ);
 	}
 	else
 	{
@@ -110,11 +113,12 @@ void CNewSocket::OnReceive(int nErrorCode)
 					pDlg->m_FriendList.InsertItem(i, pDlg->friends[i].name, pDlg->friends[i].isonline);
 				}
 			}
-		}
 
-		AsyncSelect(FD_READ);
+			//AsyncSelect(FD_READ);
+		}
 	}
 
+	AsyncSelect(FD_READ);
 
 	CAsyncSocket::OnReceive(nErrorCode);
 }

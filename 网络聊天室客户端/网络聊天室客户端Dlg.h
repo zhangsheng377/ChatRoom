@@ -65,4 +65,6 @@ public:
 	CString SendReceiveCommand();
 	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
 	virtual void OnCancel();
+
+	CListBox m_CommandListBox;
 };
