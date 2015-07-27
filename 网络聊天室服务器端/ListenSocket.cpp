@@ -42,7 +42,7 @@ void ListenSocket::OnAccept(int nErrorCode)
 	{
 		pSocket->AsyncSelect(FD_READ);
 		
-		//pSocket->GetPeerName(pSocket->my_IP, pSocket->my_Port);
+		pSocket->GetPeerName(pSocket->my_IP, pSocket->my_Port);
 		
 		m_pNewSockets.push_back(pSocket);
 	}

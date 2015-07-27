@@ -81,6 +81,8 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	
 	m_Socket.my_Port = 32137;
 	m_Socket.my_IP = "zhangsheng377.wicp.net";
+	//m_Socket.my_Port = 5088;
+	//m_Socket.my_IP = "112.80.210.23";
 	m_Socket.ShutDown(2);
 	m_Socket.m_hSocket = INVALID_SOCKET;
 	m_Socket.my_Connected = FALSE;
@@ -208,6 +210,7 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 				return;
 			}
 		}
+		m_Socket.Listen(1);
 		m_Socket.Connect(m_Socket.my_IP, m_Socket.my_Port);
 		m_Socket.my_TryCount++;
 		if (m_Socket.my_TryCount >= m_Socket.my_TryMax || m_Socket.my_Connected)
