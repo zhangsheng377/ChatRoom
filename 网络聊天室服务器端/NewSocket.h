@@ -16,5 +16,8 @@ public:
 	CString my_Account;
 
 	virtual void OnClose(int nErrorCode);
+
+	CString my_IP;
+	UINT my_Port;
 };
 

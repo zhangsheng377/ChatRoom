@@ -41,6 +41,9 @@ void ListenSocket::OnAccept(int nErrorCode)
 	if (Accept(*pSocket))
 	{
 		pSocket->AsyncSelect(FD_READ);
+		
+		pSocket->GetPeerName(pSocket->my_IP, pSocket->my_Port);
+		
 		m_pNewSockets.push_back(pSocket);
 	}
 	else

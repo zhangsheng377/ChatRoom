@@ -18,5 +18,6 @@ public:
 	BOOL my_Received;
 	virtual void OnReceive(int nErrorCode);
 	CString my_SendData;
+	virtual void OnAccept(int nErrorCode);
 };
 
