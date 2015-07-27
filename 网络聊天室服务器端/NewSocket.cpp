@@ -41,8 +41,7 @@ UINT BroadcastOnline(LPVOID lpParam)
 				Buffer[Length + 1] = '\0';
 				(*e)->Send(Buffer, Length, 0);
 
-				CString port;port.Format(L"%d", (*e)->my_Port);
-				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += (*e)->my_IP;temp += port;temp += L"发出:";temp += tmp;
+				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += L"发出:";temp += tmp;
 				pDlg->m_ListBox.InsertString(0, temp);
 				
 			}
@@ -103,8 +102,7 @@ UINT BroadcastOffline(LPVOID lpParam)
 				Buffer[Length + 1] = '\0';
 				(*e)->Send(Buffer, Length, 0);
 
-				CString port;port.Format(L"%d", (*e)->my_Port);
-				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += (*e)->my_IP;temp += port;temp += L"发出:";temp += tmp;
+				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += L"发出:";temp += tmp;
 				pDlg->m_ListBox.InsertString(0, temp);
 			}
 			else

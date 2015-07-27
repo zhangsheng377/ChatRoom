@@ -17,7 +17,7 @@ public:
 
 	virtual void OnClose(int nErrorCode);
 
-	CString my_IP;
-	UINT my_Port;
+	//CString my_IP;
+	//UINT my_Port;
 };
 
