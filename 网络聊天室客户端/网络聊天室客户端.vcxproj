@@ -106,6 +106,7 @@
   <ItemGroup>
     <ClInclude Include="ChatDlg.h" />
     <ClInclude Include="FRIEND.h" />
+    <ClInclude Include="ListenSocket.h" />
     <ClInclude Include="LoginClass.h" />
     <ClInclude Include="NewSocket.h" />
     <ClInclude Include="Resource.h" />
@@ -118,6 +119,7 @@
   <ItemGroup>
     <ClCompile Include="ChatDlg.cpp" />
     <ClCompile Include="FRIEND.cpp" />
+    <ClCompile Include="ListenSocket.cpp" />
     <ClCompile Include="LoginClass.cpp" />
     <ClCompile Include="NewSocket.cpp" />
     <ClCompile Include="ShowWaitDlg.cpp" />

@@ -42,7 +42,7 @@ UINT BroadcastOnline(LPVOID lpParam)
 				(*e)->Send(Buffer, Length, 0);
 
 				CString port;port.Format(L"%d", (*e)->my_Port);
-				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += L":";temp += port;temp += L"发出:";temp += tmp;
+				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += L" ";temp += (*e)->my_IP;temp += L":";temp += port;temp += L" 发出:";temp += tmp;
 				pDlg->m_ListBox.InsertString(0, temp);
 				
 			}
@@ -104,7 +104,7 @@ UINT BroadcastOffline(LPVOID lpParam)
 				(*e)->Send(Buffer, Length, 0);
 
 				CString port;port.Format(L"%d", (*e)->my_Port);
-				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += L":";temp += port;temp += L"发出:";temp += tmp;
+				CString tmp(Buffer), temp = L"向";temp += (*e)->my_Account;temp += L" ";temp += (*e)->my_IP;temp += L":";temp += port;temp += L" 发出:";temp += tmp;
 				pDlg->m_ListBox.InsertString(0, temp);
 			}
 			else
@@ -214,25 +214,20 @@ void NewSocket::OnReceive(int nErrorCode)
 
 							/*
 							CSocket test;
-							AfxMessageBox(L"1!");
 							if (test.m_hSocket == INVALID_SOCKET)
 							{
-								AfxMessageBox(L"2!");
 								BOOL bFlag = test.Create(0, SOCK_STREAM);
-								AfxMessageBox(L"3!");
 								if (!bFlag)
 								{
-									AfxMessageBox(L"服务器连接创建错误!");
+									AfxMessageBox(L"测试连接创建错误!");
 									test.Close();
-									//PostQuitMessage(0);
-									//return;
 								}
 							}
 							//for (size_t i = 0; i < 10; i++)
 							{
-								AfxMessageBox(L"4!");
-								test.Connect(my_IP, my_Port);
-								AfxMessageBox(L"5!");
+								//test.Connect(my_IP, my_Port);
+								test.Connect(my_IP, 5600);
+								test.Send("test", 4, 0);
 							}
 							//test.Close();
 							*/
