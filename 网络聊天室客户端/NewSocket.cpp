@@ -129,7 +129,7 @@ void CNewSocket::OnReceive(int nErrorCode)
 void CNewSocket::OnAccept(int nErrorCode)
 {
 	// TODO:  在此添加专用代码和/或调用基类
-	
+	/*
 	AfxMessageBox(L"已侦听到一个连接!");
 	CNewSocket *test = new CNewSocket();
 	if (Accept(*test))
@@ -140,6 +140,6 @@ void CNewSocket::OnAccept(int nErrorCode)
 	{
 		delete test;
 	}
-
+	*/
 	CAsyncSocket::OnAccept(nErrorCode);
 }

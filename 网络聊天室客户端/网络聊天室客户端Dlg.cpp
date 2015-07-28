@@ -79,29 +79,16 @@ BOOL C网络聊天室客户端Dlg::OnInitDialog()
 	}
 	m_ShowWaitDlg->ShowWindow(SW_SHOW);			//正在连接服务器
 	
-	//m_Socket.my_Port = 32137;
-	//m_Socket.my_IP = "zhangsheng377.wicp.net";
-	m_Socket.my_Port = 5088;
-	m_Socket.my_IP = "115.28.209.227";
+	m_Socket.my_Port = 32137;
+	m_Socket.my_IP = "zhangsheng377.wicp.net";
+	//m_Socket.my_Port = 5088;
+	//m_Socket.my_IP = "115.28.209.227";
 	m_Socket.ShutDown(2);
 	m_Socket.m_hSocket = INVALID_SOCKET;
 	m_Socket.my_Connected = FALSE;
 	m_Socket.my_TryCount = 0;
 	SetTimer(1, 1000, NULL);
-	/*
-	thread m_thread;
-	m_thread.m_Socket = &m_Socket;
-	m_thread.m_ShowWaitDlg = m_ShowWaitDlg;
-	m_thread.m_Wind = this;
-	CWinThread* mythread = AfxBeginThread(
-		(AFX_THREADPROC)WaitToConnectServer,
-		&m_thread,
-		THREAD_PRIORITY_NORMAL,
-		0,
-		0,
-		NULL
-		);
-	*/
+
 
 	//连接数据库
 	HRESULT hr;
@@ -212,20 +199,6 @@ void C网络聊天室客户端Dlg::OnTimer(UINT_PTR nIDEvent)
 			}
 		}
 		m_Socket.Connect(m_Socket.my_IP, m_Socket.my_Port);
-		/*
-		if (listentest.m_hSocket == INVALID_SOCKET)
-		{
-			BOOL bFlag1 = listentest.Create(5600, SOCK_STREAM, FD_ACCEPT);
-			if (!bFlag1)
-			{
-				AfxMessageBox(L"监听连接创建错误!");
-				m_Socket.Close();
-				PostQuitMessage(0);
-				return;
-			}
-		}
-		listentest.Listen(1);
-		*/
 		m_Socket.my_TryCount++;
 		if (m_Socket.my_TryCount >= m_Socket.my_TryMax || m_Socket.my_Connected)
 		{

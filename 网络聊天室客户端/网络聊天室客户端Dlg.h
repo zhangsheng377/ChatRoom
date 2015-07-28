@@ -9,7 +9,6 @@
 #include "afxcmn.h"
 #include "LoginClass.h"
 #include "ChatDlg.h"
-#include "ListenSocket.h"
 
 #pragma once
 
@@ -69,6 +68,4 @@ public:
 	virtual void OnCancel();
 
 	CListBox m_CommandListBox;
-
-	ListenSocket listentest;
 };

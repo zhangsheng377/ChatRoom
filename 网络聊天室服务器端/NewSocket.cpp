@@ -10,23 +10,6 @@ UINT BroadcastOnline(LPVOID lpParam)
 	ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
 	std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
 	int Length = 0;char Buffer[4096];CString SendData;
-	/*
-	for (int i = 0;i < pVectorNewSocket->size();i++)
-	{
-		if ((*pVectorNewSocket)[i]->my_Account != pListenSocket->my_NowAccount)
-		{
-			SendData = L"FriendIsOnline";SendData += pListenSocket->my_NowAccount;
-			Length = 0;memset(Buffer, 0, sizeof(Buffer));
-			Length = WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength(), NULL, 0, NULL, NULL);
-			WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
-			Buffer[Length + 1] = '\0';
-			(*pVectorNewSocket)[i]->Send(Buffer, Length, 0);
-
-			CString tmp(Buffer), temp = L"向";temp += (*pVectorNewSocket)[i]->my_Account;temp += L"发出:";temp += tmp;
-			pDlg->m_ListBox.InsertString(0, temp);
-		}
-	}
-	*/
 	std::vector<NewSocket*>::iterator t;
 	for (std::vector<NewSocket*>::iterator e = (*pVectorNewSocket).begin();e != (*pVectorNewSocket).end();e++)
 	{
@@ -62,33 +45,6 @@ UINT BroadcastOffline(LPVOID lpParam)
 	ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
 	std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
 	int Length = 0;char Buffer[4096];CString SendData;
-	//auto e = pVectorNewSocket->begin();
-	/*
-	for (int i = 0;i < pVectorNewSocket->size();i++)
-	{
-		if ((*pVectorNewSocket)[i]->my_Account != pListenSocket->my_NowAccount)
-		{
-			SendData = L"FriendIsOffline";SendData += pListenSocket->my_NowAccount;
-			Length = 0;memset(Buffer, 0, sizeof(Buffer));
-			Length = WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength(), NULL, 0, NULL, NULL);
-			WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
-			Buffer[Length + 1] = '\0';
-			(*pVectorNewSocket)[i]->Send(Buffer, Length, 0);
-
-			CString tmp(Buffer), temp = L"向";temp += (*pVectorNewSocket)[i]->my_Account;temp += L"发出:";temp += tmp;
-			pDlg->m_ListBox.InsertString(0, temp);
-		}
-		if ((*e)->my_Account == pListenSocket->my_NowAccount)
-		{
-			pVectorNewSocket->erase(e);
-			i--;
-		}
-		else
-		{
-			e++;
-		}
-	}
-	*/
 	std::vector<NewSocket*>::iterator t;
 	for (std::vector<NewSocket*>::iterator e = (*pVectorNewSocket).begin();e != (*pVectorNewSocket).end();e++)
 	{
@@ -211,26 +167,6 @@ void NewSocket::OnReceive(int nErrorCode)
 
 							pDlg->m_ListenSocket.my_NowAccount = my_Account;
 							CWinThread *pThread = AfxBeginThread(BroadcastOnline, pDlg);
-
-							/*
-							CSocket test;
-							if (test.m_hSocket == INVALID_SOCKET)
-							{
-								BOOL bFlag = test.Create(0, SOCK_STREAM);
-								if (!bFlag)
-								{
-									AfxMessageBox(L"测试连接创建错误!");
-									test.Close();
-								}
-							}
-							//for (size_t i = 0; i < 10; i++)
-							{
-								//test.Connect(my_IP, my_Port);
-								test.Connect(my_IP, 5600);
-								test.Send("test", 4, 0);
-							}
-							//test.Close();
-							*/
 						}
 						else
 						{
