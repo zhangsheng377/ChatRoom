@@ -37,6 +37,7 @@ UINT BroadcastOnline(LPVOID lpParam)
 			}
 		}
 	}
+	return 0;
 }
 
 UINT BroadcastOffline(LPVOID lpParam)
@@ -77,6 +78,7 @@ UINT BroadcastOffline(LPVOID lpParam)
 			e = t;
 		}
 	}
+	return 0;
 }
 
 
@@ -343,6 +345,39 @@ void NewSocket::OnReceive(int nErrorCode)
 						
 						pDlg->m_pRecordSet->Close();
 						my_SendData = L"";
+					}
+					else
+					{
+						if (memcmp(m_Buffer, "SendTo", sizeof("SendTo") - 1) == 0)
+						{
+							char temp[4096];memset(temp, 0, sizeof(temp));
+							memcpy(temp, &m_Buffer[sizeof("SendTo") - 1], 5);
+							CString account(temp);
+							CString data(&m_Buffer[sizeof("SendTo12345") - 1]);
+							
+							ListenSocket *pListenSocket = &pDlg->m_ListenSocket;
+							std::vector<NewSocket*> *pVectorNewSocket = &pListenSocket->m_pNewSockets;
+							int Length = 0;char Buffer[4096];CString SendData;
+							std::vector<NewSocket*>::iterator t;
+							for (std::vector<NewSocket*>::iterator e = (*pVectorNewSocket).begin();e != (*pVectorNewSocket).end();e++)
+							{
+								if ((*e)->my_Account == account)
+								{
+									SendData = L"ReceiveFrom";SendData += my_Account;SendData += data;
+									Length = 0;memset(Buffer, 0, sizeof(Buffer));
+									Length = WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength(), NULL, 0, NULL, NULL);
+									WideCharToMultiByte(CP_ACP, 0, SendData, SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
+									Buffer[Length + 1] = '\0';
+									(*e)->Send(Buffer, Length, 0);
+
+									CString port;port.Format(L"%d", (*e)->my_Port);
+									CString tmpdata(Buffer), tempstring = L"向";tempstring += L" ";tempstring += account;tempstring += L" 发出:";tempstring += tmpdata;
+									pDlg->m_ListBox.InsertString(0, tempstring);
+									break;
+								}
+							}
+							my_SendData = L"";
+						}
 					}
 				}
 			}

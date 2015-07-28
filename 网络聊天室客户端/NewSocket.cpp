@@ -116,6 +116,37 @@ void CNewSocket::OnReceive(int nErrorCode)
 
 			//AsyncSelect(FD_READ);
 		}
+		else
+		{
+			if (memcmp(my_Buffer, "ReceiveFrom", sizeof("ReceiveFrom") - 1) == 0)
+			{
+				char tempaccount[20];memset(tempaccount, 0, sizeof(tempaccount));
+				memcpy(tempaccount, &my_Buffer[sizeof("ReceiveFrom") - 1], 5);
+				CString account(tempaccount);
+				CString data(&my_Buffer[sizeof("ReceiveFrom12345") - 1]);
+
+				for (UINT i = 0;i < pDlg->friends.size();i++)
+				{
+					if (pDlg->friends[i].account == account)
+					{
+						if (pDlg->friends[i].IsChatting == TRUE)
+						{
+							CString tmpstring = L"ºÃÓÑËµ:";tmpstring += data;
+							pDlg->friends[i].m_ChatDlg->m_ChatListBox.InsertString(0, tmpstring);
+						}
+						else
+						{
+							pDlg->m_FriendList.SetItemState(i, LVIS_SELECTED, LVIS_SELECTED);
+							pDlg->OnNMDblclkList1(NULL,0);
+							CString tmpstring = pDlg->friends[i].name;tmpstring += L" Ëµ:";tmpstring += data;
+							pDlg->friends[i].m_ChatDlg->m_ChatListBox.InsertString(0, tmpstring);
+						}
+						break;
+					}
+				}
+
+			}
+		}
 	}
 
 	AsyncSelect(FD_READ);

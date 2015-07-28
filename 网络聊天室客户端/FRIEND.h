@@ -1,3 +1,4 @@
+#include "ChatDlg.h"
 #pragma once
 class FRIEND
 {
@@ -8,7 +9,7 @@ public:
 	CString account;
 	CString name;
 	int isonline;
-	BOOL IsChatting;
-	
+	BOOL IsChatting;	
+	ChatDlg *m_ChatDlg;
 };
 

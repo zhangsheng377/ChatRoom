@@ -1,7 +1,8 @@
 #pragma once
 #include "afxwin.h"
 #include "NewSocket.h"
-#include "FRIEND.h"
+#include "resource.h"
+//#include "FRIEND.h"
 
 
 // ChatDlg ¶Ô»°¿ò
@@ -26,8 +27,8 @@ public:
 	CString my_ChatSendData;
 	afx_msg void OnBnClickedButton1();
 
-	CNewSocket m_Socket;
+	//CNewSocket m_Socket;
 	int FriendNum;
 	virtual void OnCancel();
-	FRIEND *Friend;
+	//FRIEND *Friend;
 };
