@@ -131,7 +131,7 @@ void CNewSocket::OnReceive(int nErrorCode)
 					{
 						if (pDlg->friends[i].IsChatting == TRUE)
 						{
-							CString tmpstring = L"ºÃÓÑËµ:";tmpstring += data;
+							CString tmpstring = pDlg->friends[i].name;tmpstring += L" Ëµ:";tmpstring += data;
 							pDlg->friends[i].m_ChatDlg->m_ChatListBox.InsertString(0, tmpstring);
 						}
 						else
