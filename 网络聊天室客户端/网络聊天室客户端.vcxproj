@@ -104,6 +104,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddFriend.h" />
     <ClInclude Include="ChatDlg.h" />
     <ClInclude Include="FRIEND.h" />
     <ClInclude Include="ListenSocket.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="网络聊天室客户端Dlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddFriend.cpp" />
     <ClCompile Include="ChatDlg.cpp" />
     <ClCompile Include="FRIEND.cpp" />
     <ClCompile Include="ListenSocket.cpp" />

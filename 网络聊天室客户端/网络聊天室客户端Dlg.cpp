@@ -43,6 +43,7 @@ BEGIN_MESSAGE_MAP(C网络聊天室客户端Dlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
 	ON_WM_NCPAINT()
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST1, &C网络聊天室客户端Dlg::OnNMDblclkList1)
+	ON_BN_CLICKED(IDC_BUTTON1, &C网络聊天室客户端Dlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -403,9 +404,23 @@ void C网络聊天室客户端Dlg::FreshFriendList()
 			temp.isonline = 1;
 		}
 		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
-		temp.IsChatting = FALSE;
 
-		friends.push_back(temp);
+		bool isfind = false;
+		for (UINT i = 0;i < friends.size();i++)
+		{
+			if (temp.account == friends[i].account)
+			{
+				isfind = true;
+				friends[i].isonline = temp.isonline;
+				break;
+			}
+		}
+		if (isfind==false)
+		{
+			temp.IsChatting = FALSE;
+			friends.push_back(temp);
+		}
+		
 		m_pRecordSet->MoveNext();
 	} 
 
@@ -496,4 +511,68 @@ void C网络聊天室客户端Dlg::OnCancel()
 	m_Socket.Close();
 
 	CDialogEx::OnCancel();
+}
+
+
+void C网络聊天室客户端Dlg::OnBnClickedButton1()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	AddFriend m_AddFriend;
+	if (m_AddFriend.DoModal()==IDOK)
+	{
+		UpdateData(true);
+		m_Socket.my_SendData = L"SearchFriendName";
+		m_Socket.my_SendData += m_AddFriend.my_FriendName;
+
+		m_Socket.my_Length = 0;
+		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+		m_Socket.my_Length = WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength(), NULL, 0, NULL, NULL);
+		WideCharToMultiByte(CP_ACP, 0, m_Socket.my_SendData, m_Socket.my_SendData.GetLength() + 1, m_Socket.my_Buffer, m_Socket.my_Length + 1, NULL, NULL);	//转换为字节为单位
+		m_Socket.my_Buffer[m_Socket.my_Length + 1] = '\0';
+		m_Socket.Send(m_Socket.my_Buffer, m_Socket.my_Length, 0);
+		m_Socket.my_Length = 0;
+		memset(m_Socket.my_Buffer, 0, sizeof(m_Socket.my_Buffer));
+
+		do
+		{
+			m_Socket.my_Length = m_Socket.Receive(m_Socket.my_Buffer, sizeof(m_Socket.my_Buffer));
+		} while (m_Socket.my_Buffer[0] == '\0');
+		if (memcmp(m_Socket.my_Buffer, "ThisFriendAccountIs", sizeof("ThisFriendAccountIs") - 1) == 0)
+		{
+			char temp[4096];memset(temp, 0, sizeof(temp));
+			memcpy(temp, &m_Socket.my_Buffer[sizeof("ThisFriendAccountIs") - 1], 5);
+			CString account(temp);
+
+			m_pRecordSet.CreateInstance(__uuidof(Recordset));
+			try
+			{
+				CString command4 = L"SELECT * FROM 好友表 WHERE 账号 = '";command4 += account;command4 += L"'";
+				m_pRecordSet->Open(_variant_t(command4), m_pClientDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+			}
+			catch (_com_error e)
+			{
+				CString errormessage;
+				errormessage.Format(L"打开数据表失败!\r\n错误信息:%s", e.ErrorMessage());
+				AfxMessageBox(errormessage);
+				PostQuitMessage(0);
+			}
+			if (!m_pRecordSet->adoEOF)
+			{
+				AfxMessageBox(L"您已有该好友!");
+				FreshFriendList();
+			}
+			else
+			{
+				m_pRecordSet->AddNew();
+				m_pRecordSet->PutCollect("账号", _variant_t(account));
+				m_pRecordSet->PutCollect("姓名", _variant_t(m_AddFriend.my_FriendName));
+				m_pRecordSet->Update();
+				FreshFriendList();
+			}
+		}
+		else
+		{
+			AfxMessageBox(L"添加好友失败!可能该好友尚未注册,或网络出现异常!");
+		}
+	}
 }

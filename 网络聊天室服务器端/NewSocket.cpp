@@ -378,6 +378,52 @@ void NewSocket::OnReceive(int nErrorCode)
 							}
 							my_SendData = L"";
 						}
+						else
+						{
+							if (memcmp(m_Buffer, "SearchFriendName", sizeof("SearchFriendName") - 1) == 0)
+							{
+								CString name(&m_Buffer[sizeof("SearchFriendName") - 1]);
+
+								pDlg->m_pRecordSet.CreateInstance(__uuidof(Recordset));
+								try
+								{
+									CString command4 = L"SELECT * FROM 用户表 WHERE 姓名 = '";command4 += name;command4 += L"'";
+									pDlg->m_pRecordSet->Open(_variant_t(command4), pDlg->m_pServerDB.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+								}
+								catch (_com_error e)
+								{
+									CString errormessage;
+									errormessage.Format(L"打开数据表失败!\r\n错误信息:%s", e.ErrorMessage());
+									AfxMessageBox(errormessage);
+									//发出退出命令给客户端
+									//......
+									PostQuitMessage(0);
+								}
+								if (!pDlg->m_pRecordSet->adoEOF)
+								{
+									my_SendData = L"ThisFriendAccountIs";
+									my_SendData += (CString)pDlg->m_pRecordSet->GetCollect("账号");
+									if (my_SendData != "")
+									{
+										int Length = 0;
+										char Buffer[4096];
+										memset(Buffer, 0, sizeof(Buffer));
+										Length = WideCharToMultiByte(CP_ACP, 0, my_SendData, my_SendData.GetLength(), NULL, 0, NULL, NULL);
+										WideCharToMultiByte(CP_ACP, 0, my_SendData, my_SendData.GetLength() + 1, Buffer, Length + 1, NULL, NULL);	//转换为字节为单位
+										Buffer[Length + 1] = '\0';
+										Send(Buffer, Length, 0);
+										CString tmp(Buffer), temp = L"发送出:";temp += tmp;
+										pDlg->m_ListBox.InsertString(0, temp);
+
+										my_SendData = L"";
+									}
+								}
+								else
+								{
+									my_SendData = L"查无此人!";
+								}
+							}
+						}
 					}
 				}
 			}

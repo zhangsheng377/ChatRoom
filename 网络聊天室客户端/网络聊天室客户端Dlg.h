@@ -9,6 +9,7 @@
 #include "afxcmn.h"
 #include "LoginClass.h"
 #include "ChatDlg.h"
+#include "AddFriend.h"
 
 #pragma once
 
@@ -68,4 +69,5 @@ public:
 	virtual void OnCancel();
 
 	CListBox m_CommandListBox;
+	afx_msg void OnBnClickedButton1();
 };
